@@ -1,4 +1,5 @@
 import {useEffect, useState, type PropsWithChildren} from "react";
+import ShieldCheck from "../icons/ShieldCheck.js";
 
 interface Props extends PropsWithChildren {
   scriptUrl: string
@@ -238,7 +239,7 @@ export function Datafast({scriptUrl, callbackUrl, onReady, onSuccess, onError, c
 
 
 
-  return (<div className="df-min-h-screen df-border df-bg-blue-200">
+  return (<div className="df-min-h-screen df-border df-bg-blue-200 df-bg-white ">
     {isLoading && <div className="df-h-screen df-w-full df-absolute df-top-0 df-left-0 df-bg-black/50 df-z-50 df-flex df-items-center df-justify-center"/>}
     <div className="df-w-full df-max-w-lg df-rounded-lg df-border df-border-border df-bg-card df-mx-auto">
         {/* Header */}
@@ -252,8 +253,8 @@ export function Datafast({scriptUrl, callbackUrl, onReady, onSuccess, onError, c
                 Ingresa los datos de tu tarjeta
               </p>
             </div>
-            <div className="df-flex df-items-center df-gap-1 df-rounded-full df-bg-secondary df-px-3 df-py-1.5 df-text-xs df-text-muted-foreground">
-              {/* <ShieldCheck className="size-3.5 text-green-600" /> */}
+            <div className="df-flex df-items-center df-gap-1 df-rounded-full df-bg-gray-100 df-px-3 df-py-1.5 df-text-xs df-text-muted-foreground">
+              <ShieldCheck className="df-size-3.5 df-text-green-600" />
               <span>Seguro</span>
             </div>
           </div>
@@ -263,7 +264,7 @@ export function Datafast({scriptUrl, callbackUrl, onReady, onSuccess, onError, c
         </div>
 
         {/* Order Summary */}
-        <div className="df-rounded-lg df-bg-secondary/50 df-p-4">
+        <div className="df-rounded-lg df-bg-gray-50 df-p-4">
           <div className="df-flex df-items-center df-justify-between">
             <span className="df-text-sm df-text-muted-foreground">Total a pagar</span>
             <span className="df-text-xl df-font-semibold df-text-foreground">${total.toFixed(2)}</span>
