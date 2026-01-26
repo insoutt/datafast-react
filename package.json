@@ -1,0 +1,46 @@
+{
+  "name": "@insoutt/datafast-react",
+  "version": "0.0.1",
+  "description": "Base package scaffold for datafast-react.",
+  "keywords": [
+    "react",
+    "datafast"
+  ],
+  "homepage": "https://github.com/insoutt/datafast-react",
+  "bugs": {
+    "url": "https://github.com/insoutt/datafast-react/issues"
+  },
+  "author": "insoutt",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/insoutt/datafast-react.git"
+  },
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write .",
+    "check-format": "prettier --check .",
+    "test": "vitest run",
+    "dev": "vitest",
+    "ci": "npm run build && npm run check-format && npm run test",
+    "local-release": "changeset version && changeset publish",
+    "prepublishOnly": "npm run ci"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.8",
+    "@types/react": "^19.2.9",
+    "@types/react-dom": "^19.2.3",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  }
+}
