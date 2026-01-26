@@ -198,9 +198,9 @@ export function Datafast({scriptUrl, callbackUrl, onReady, onSuccess, onError, c
         // @ts-ignore
         spinner.style.top = '45%';
         spinner.innerHTML = `
-        <div class="flex items-center justify-center">
+        <div class="df-flex df-items-center df-justify-center">
           <div>
-            <div class="bg-white rounded-full p-8" role="status">
+            <div class="df-bg-white df-rounded-full df-p-8" role="status">
               Cargando...
             </div>
           </div>
@@ -238,35 +238,35 @@ export function Datafast({scriptUrl, callbackUrl, onReady, onSuccess, onError, c
 
 
 
-  return (<div className="min-h-screen border bg-blue-200">
-    {isLoading && <div className="h-screen w-full absolute top-0 left-0 bg-black/50 z-50 flex items-center justify-center"/>}
-    <div className="w-full max-w-lg rounded-lg border border-border bg-card mx-auto">
+  return (<div className="df-min-h-screen df-border df-bg-blue-200">
+    {isLoading && <div className="df-h-screen df-w-full df-absolute df-top-0 df-left-0 df-bg-black/50 df-z-50 df-flex df-items-center df-justify-center"/>}
+    <div className="df-w-full df-max-w-lg df-rounded-lg df-border df-border-border df-bg-card df-mx-auto">
         {/* Header */}
-        <div className="border-b border-border p-6">
-          <div className="flex items-center justify-between">
+        <div className="df-border-b df-border-border df-p-6">
+          <div className="df-flex df-items-center df-justify-between">
             <div>
-              <h2 className="text-lg font-semibold tracking-tight text-foreground">
+              <h2 className="df-text-lg df-font-semibold df-tracking-tight df-text-foreground">
                 Información de pago
               </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="df-mt-1 df-text-sm df-text-muted-foreground">
                 Ingresa los datos de tu tarjeta
               </p>
             </div>
-            <div className="flex items-center gap-1 rounded-full bg-secondary px-3 py-1.5 text-xs text-muted-foreground">
+            <div className="df-flex df-items-center df-gap-1 df-rounded-full df-bg-secondary df-px-3 df-py-1.5 df-text-xs df-text-muted-foreground">
               {/* <ShieldCheck className="size-3.5 text-green-600" /> */}
               <span>Seguro</span>
             </div>
           </div>
         </div>
-        <div className="p-4">
+        <div className="df-p-4">
           <form action={callbackUrl} onSubmit={onSubmit} className="paymentWidgets" data-brands="VISA MASTER AMEX"/>
         </div>
 
         {/* Order Summary */}
-        <div className="rounded-lg bg-secondary/50 p-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">Total a pagar</span>
-            <span className="text-xl font-semibold text-foreground">${total.toFixed(2)}</span>
+        <div className="df-rounded-lg df-bg-secondary/50 df-p-4">
+          <div className="df-flex df-items-center df-justify-between">
+            <span className="df-text-sm df-text-muted-foreground">Total a pagar</span>
+            <span className="df-text-xl df-font-semibold df-text-foreground">${total.toFixed(2)}</span>
           </div>
         </div>
     </div>

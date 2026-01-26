@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* WPWL Styles */
+.wpwl-form {
+  @apply df-mb-2 df-max-w-full;
+}
+.wpwl-form-card {
+  @apply df-border df-py-2 df-px-4 df-rounded-lg;
+}
+.wpwl-registration {
+  @apply df-w-full;
+}
+
+.wpwl-button-pay {
+  @apply df-bg-gray-800 df-rounded-lg df-border-black hover:df-border-gray-700 hover:df-bg-gray-900 df-w-full;
+}
+
+button[data-action="show-initial-forms"] {
+  @apply hover:df-bg-gray-200 hover:df-text-gray-800;
+  @apply df-bg-gray-100 df-border df-border-dashed df-border-gray-300 df-text-foreground df-py-4;
+}
+
+/* Grupo campos */
+.wpwl-group, .wpwl--remember-box {
+  @apply df-mb-3
+}
+
+/* Inputs */
+.wpwl-control {
+  @apply df-border-0 df-rounded-lg df-pl-2 df-py-2 df-bg-gray-100;
+}
+
+.wpwl-label, .wpwl-control, .wpwl-wrapper {
+  @apply df-w-full;
+}
+
+.wpwl-label {
+  @apply df-font-bold df-text-sm;
+}
+
+.wpwl-wrapper-brand {
+  @apply df-w-1/2;
+}
+.wpwl-brand-card {
+  @apply df-w-1/5;
+}
+
+/* Group saved cards */
+
+#wpwl-registrations {
+  @apply df-mb-4 df-border-b df-border-gray-300;
+}
+.wpwl-wrapper-registration-brand {
+  @apply df-w-11/12;
+}
+
+.wpwl-icon {
+  @apply df-rounded-full df-px-1;
+  top: 0.2em;
+}
+
+.wpwl-hint {
+  @apply df-text-xs;
+}
+
+.wpwl-popover-content {
+  @apply df-text-sm;
+}
+/* Saved cards */
+.wpwl-group-registration {
+  @apply df-rounded-xl df-border df-border-gray-300 df-mb-2 df-bg-gray-100;
+}
+.wpwl-group-registration.wpwl-selected {
+  @apply df-border-gray-800 df-border df-bg-gray-50;
+}
+
+.wpwl-registration {
+  @apply df-grid df-grid-cols-3 df-py-2 df-pl-2;
+}
+
+
+/* End Saved cards */
+
+.wpwl-popover {
+  @apply df-text-black;
+}
+
+.wpwl-wrapper-registration-registrationId {
+  @apply df-col-span-2 df-w-full;
+}
+
+
+.wpwl-wrapper-registration-cvv {
+  @apply df-w-full df-flex df-flex-col df-text-black;
+}
+
+.wpwl-control-cvv, .wpwl-wrapper-expiry {
+  @apply df-w-1/2;
+}
+
+.wpwl-wrapper-cardNumber, .wpwl-wrapper-cardHolder{
+  @apply df-w-full;
+}
+
+input[name="registrationId"] {
+  @apply df-h-4 df-w-4 df-border-gray-300;
+}
+
+
+/* Help CVV */
+.wpwl-wrapper>.wpwl-icon {
+  @apply df-right-0 sm:df-right-[2rem];
+  top: 0.3rem;
+}
+
+/* Remember card */
+.wpwl--remember-box {
+  @apply df-rounded-lg df-border df-border-solid df-border-gray-500 df-px-2;
+}
+
+.wpwl--header {
+  @apply df-flex df-items-center df-space-x-4 df-text-base;
+}
+
+.wpwl--paragraph {
+  @apply df-text-xs df-text-gray-600 df-mb-0;
+}
+
+.wpwl--checkbox {
+  @apply df-h-5 df-w-5 df-rounded-lg df-border-gray-300 df-text-foreground focus:df-ring-foreground;
+}
+
+.wpwl--remember-label {
+  @apply df-py-2 df-text-sm;
+}
+
+.dt-poweredby {
+  @apply df-my-4 df-max-w-sm df-mx-auto;
+}
+/* End WPWL Styles */
