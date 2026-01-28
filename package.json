@@ -26,8 +26,8 @@
     "build:css": "npx tailwindcss -i ./src/styles.css -o ./dist/styles.css",
     "format": "prettier --write .",
     "check-format": "prettier --check .",
-    "test": "vitest run",
-    "dev": "vitest",
+    "test": "vitest run --exclude dist/",
+    "dev": "vitest --exclude dist/**",
     "ci": "npm run build && npm run check-format && npm run test",
     "local-release": "changeset version && changeset publish",
     "prepublishOnly": "npm run ci"
