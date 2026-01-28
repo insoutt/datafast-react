@@ -12,7 +12,7 @@ Renderiza el formulario de pago de Datafast y carga el script remoto. Soporta mo
 
 | Prop               | Tipo                        | Requerido | Default                                 | Descripción                                                           |
 | ------------------ | --------------------------- | --------- | --------------------------------------- | --------------------------------------------------------------------- |
-| `scriptUrl`        | `string`                    | Sí        | —                                       | URL del script de Datafast (widget WPWL).                             |
+| `checkoutId`        | `string`                    | Sí        | —                                       | ID de pago generado en el backend.                             |
 | `callbackUrl`      | `string`                    | Sí        | —                                       | URL de retorno del pago. En modo `inline` se carga dentro del iframe. |
 | `title`            | `string`                    | No        | `Información de pago`                   | Título del encabezado.                                                |
 | `description`      | `string`                    | No        | `Ingresa los datos de tu tarjeta`       | Texto descriptivo del encabezado.                                     |
@@ -24,6 +24,7 @@ Renderiza el formulario de pago de Datafast y carga el script remoto. Soporta mo
 | `type`             | `'redirection' \| 'inline'` | No        | `redirection`                           | Modo de respuesta del pago. `inline` muestra un iframe.               |
 | `availableBrands`  | `string[]`                  | No        | `['VISA','MASTER','AMEX']`              | Marcas de tarjeta disponibles para el widget.                         |
 | `config`           | `Omit<WpwlOptions,'style'>` | No        | —                                       | Opciones avanzadas de WPWL (labels, callbacks, etc).                  |
+| `isTest`       | `boolean`                                                                  | No        | `true`              | Usa el script de entorno de pruebas.              |
 
 #### Ejemplo mínimo
 
@@ -31,17 +32,16 @@ Renderiza el formulario de pago de Datafast y carga el script remoto. Soporta mo
 import { Datafast } from '@insoutt/datafast-react';
 
 <Datafast
-  scriptUrl={scriptUrl}
+  checkoutId={checkoutId}
   callbackUrl="https://mi-sitio.com/pago/resultado"
   amount={19.99}
-  type="inline"
   availableBrands={['VISA', 'MASTER']}
 />;
 ```
 
 ### PaymentButton
 
-Botón que crea el checkout y devuelve `checkoutId` y `scriptUrl` para renderizar el widget de Datafast. Permite render-prop para personalizar el UI.
+Botón que crea el checkout y devuelve `checkoutId` para renderizar el widget de Datafast. Permite render-prop para personalizar el UI.
 
 #### Props
 
@@ -49,10 +49,9 @@ Botón que crea el checkout y devuelve `checkoutId` y `scriptUrl` para renderiza
 | -------------- | -------------------------------------------------------------------------- | --------- | ------------------- | ------------------------------------------------- |
 | `url`          | `string`                                                                   | Sí        | —                   | Endpoint backend que crea el checkout.            |
 | `checkoutData` | `CheckoutData`                                                             | Sí        | —                   | Datos del cliente y carrito enviados al backend.  |
-| `onSuccess`    | `(data: { checkoutId: string; scriptUrl: string }) => void`                | Sí        | —                   | Se ejecuta cuando el backend retorna el checkout. |
+| `onSuccess`    | `(data: { checkoutId: string; }) => void`                | Sí        | —                   | Se ejecuta cuando el backend retorna el checkout. |
 | `onError`      | `(error: Error) => void`                                                   | Sí        | —                   | Se ejecuta cuando falla la creación del checkout. |
 | `text`         | `string`                                                                   | No        | `Pagar con tarjeta` | Texto del botón por defecto.                      |
-| `isTest`       | `boolean`                                                                  | No        | `true`              | Usa el script de entorno de pruebas.              |
 | `variant`      | `'primary' \| 'dark'`                                                      | No        | `primary`           | Estilo visual del botón.                          |
 | `children`     | `(props: { isLoading: boolean; createCheckout: () => void }) => ReactNode` | No        | —                   | Render-prop para UI personalizado.                |
 
@@ -75,7 +74,7 @@ import { useState } from 'react';
 import { PaymentButton, Datafast } from '@insoutt/datafast-react';
 
 function CheckoutExample() {
-  const [scriptUrl, setScriptUrl] = useState<string | null>(null);
+  const [checkoutId, setCheckoutId] = useState<string | null>(null);
 
   return (
     <>
@@ -102,13 +101,13 @@ function CheckoutExample() {
             ],
           },
         }}
-        onSuccess={({ scriptUrl }) => setScriptUrl(scriptUrl)}
+        onSuccess={({ checkoutId }) => setCheckoutId(checkoutId)}
         onError={(error) => console.error(error)}
       />
 
-      {scriptUrl && (
+      {checkoutId && (
         <Datafast
-          scriptUrl={scriptUrl}
+          checkoutId={checkoutId}
           callbackUrl="https://mi-sitio.com/pago/resultado"
         />
       )}
