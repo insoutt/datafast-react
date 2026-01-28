@@ -8,10 +8,7 @@
   @apply df-mb-2 df-max-w-full;
 }
 .wpwl-form-card {
-  @apply df-border df-py-2 df-px-4 df-rounded-lg;
-}
-.wpwl-registration {
-  @apply df-w-full;
+  @apply df-py-2 df-px-4 df-rounded-lg df-border !df-border-zinc-200 dark:!df-bg-zinc-900;
 }
 
 .wpwl-button-pay {
@@ -51,7 +48,7 @@ button[data-action="show-initial-forms"] {
 /* Group saved cards */
 
 #wpwl-registrations {
-  @apply df-mb-4 df-border-b df-border-gray-300;
+  @apply df-mb-4 df-border-b df-border-zinc-200 dark:df-border-zinc-700;
 }
 .wpwl-wrapper-registration-brand {
   @apply df-w-11/12;
@@ -71,10 +68,10 @@ button[data-action="show-initial-forms"] {
 }
 /* Saved cards */
 .wpwl-group-registration {
-  @apply df-rounded-xl df-border df-border-gray-300 df-mb-2 df-bg-gray-100;
+  @apply df-rounded-xl df-border df-border-gray-300 df-mb-2 df-bg-gray-100 dark:df-bg-gray-800;
 }
 .wpwl-group-registration.wpwl-selected {
-  @apply df-border-gray-800 df-border df-bg-gray-50;
+  @apply df-border-gray-800 df-border df-bg-gray-50 dark:df-bg-gray-700;
 }
 
 .wpwl-registration {
