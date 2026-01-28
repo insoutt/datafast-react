@@ -221,7 +221,7 @@ export function Datafast({
         spinner.innerHTML = `
         <div class="df-flex df-items-center df-justify-center">
           <div>
-            <div class="df-bg-white df-rounded-full df-p-8" role="status">
+            <div class="df-bg-white df-rounded-full df-p-8 dark:df-bg-zinc-900" role="status">
               Cargando...
             </div>
           </div>
