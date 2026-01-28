@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* WPWL Styles */
 .wpwl-form {
   @apply df-mb-2 df-max-w-full;
@@ -11,20 +10,19 @@
   @apply df-py-2 df-px-4 df-rounded-lg df-border !df-border-zinc-200 dark:!df-bg-zinc-900;
 }
 
-
-
 .wpwl-button-pay {
   @apply df-bg-gray-800 df-rounded-lg df-border-black hover:df-border-gray-700 hover:df-bg-gray-900 df-w-full;
 }
 
-button[data-action="show-initial-forms"] {
+button[data-action='show-initial-forms'] {
   @apply hover:df-bg-gray-200 hover:df-text-gray-800;
   @apply df-bg-gray-100 df-border df-border-dashed df-border-gray-300 df-text-foreground df-py-4;
 }
 
 /* Grupo campos */
-.wpwl-group, .wpwl--remember-box {
-  @apply df-mb-3
+.wpwl-group,
+.wpwl--remember-box {
+  @apply df-mb-3;
 }
 
 /* Inputs */
@@ -32,7 +30,9 @@ button[data-action="show-initial-forms"] {
   @apply df-border-0 df-rounded-lg df-pl-2 df-py-2 df-bg-gray-100 dark:df-text-gray-800;
 }
 
-.wpwl-label, .wpwl-control, .wpwl-wrapper {
+.wpwl-label,
+.wpwl-control,
+.wpwl-wrapper {
   @apply df-w-full;
 }
 
@@ -80,7 +80,6 @@ button[data-action="show-initial-forms"] {
   @apply df-grid df-grid-cols-3 df-py-2 df-pl-2;
 }
 
-
 /* End Saved cards */
 
 .wpwl-popover {
@@ -91,26 +90,26 @@ button[data-action="show-initial-forms"] {
   @apply df-col-span-2 df-w-full;
 }
 
-
 .wpwl-wrapper-registration-cvv {
   @apply df-w-full df-flex df-flex-col df-text-black;
 }
 
-.wpwl-control-cvv, .wpwl-wrapper-expiry {
+.wpwl-control-cvv,
+.wpwl-wrapper-expiry {
   @apply df-w-1/2;
 }
 
-.wpwl-wrapper-cardNumber, .wpwl-wrapper-cardHolder{
+.wpwl-wrapper-cardNumber,
+.wpwl-wrapper-cardHolder {
   @apply df-w-full;
 }
 
-input[name="registrationId"] {
+input[name='registrationId'] {
   @apply df-h-4 df-w-4 df-border-gray-300;
 }
 
-
 /* Help CVV */
-.wpwl-wrapper>.wpwl-icon {
+.wpwl-wrapper > .wpwl-icon {
   @apply df-right-0 sm:df-right-[2rem];
   top: 0.3rem;
 }
