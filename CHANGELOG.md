@@ -1,5 +1,11 @@
 # @insoutt/datafast-react
 
+## 2.0.3
+
+### Patch Changes
+
+- ade4142: Cambiar prop `scriptUrl` por `checkoutId` en componente Datafast
+
 ## 2.0.2
 
 ### Patch Changes
