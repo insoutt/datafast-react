@@ -1,7 +1,7 @@
 {
   "name": "@insoutt/datafast-react",
   "version": "2.0.2",
-  "description": "Base package scaffold for datafast-react.",
+  "description": "Componente de React para la pasarela de pagos Datafast",
   "keywords": [
     "react",
     "datafast"
