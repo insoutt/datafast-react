@@ -1,7 +1,6 @@
-
 export interface CheckoutData {
   customer: Customer;
-  cart:     Cart;
+  cart: Cart;
 }
 
 export interface Cart {
@@ -9,29 +8,25 @@ export interface Cart {
 }
 
 export interface Item {
-  name:        string;
+  name: string;
   description: string;
-  val_base0:   number;
+  val_base0: number;
   val_baseimp: number;
-  val_iva:     number;
-  quantity:    number;
+  val_iva: number;
+  quantity: number;
 }
 
 export interface Customer {
-  givenName:           string;
-  surname:             string;
-  email:               string;
-  phone:               string;
+  givenName: string;
+  surname: string;
+  email: string;
+  phone: string;
   identificationDocId: string;
 }
-
-
 
 export interface WpwlOptions {
   // --- Configuración General ---
   locale?: string; // Ej: "es", "en", "de"
-  style?: "card" | "plain" | "bootstrap";
-  imageStyle?: "png" | "svg";
   paymentTarget?: string;
   shopperResultTarget?: string;
   shopperResultUrl?: string;
@@ -43,9 +38,6 @@ export interface WpwlOptions {
   showBirthDate?: boolean;
   showLabels?: boolean;
   showPlaceholders?: boolean;
-  forceCardHolderEqualsBillingName?: boolean;
-  enableSAQACompliance?: boolean;
-  enableAdditionalLogs?: boolean;
 
   // --- Callbacks de Ciclo de Vida ---
   onReady?: () => void;
@@ -59,7 +51,6 @@ export interface WpwlOptions {
   onDetectBin?: (bin: string) => void;
 
   // --- Callbacks de Validación y Envío ---
-  // Pueden retornar boolean o una Promise<boolean> para flujos asíncronos
   onBeforeSubmitCard?: () => boolean | Promise<boolean>;
   onBeforeSubmitOneClickCard?: () => boolean | Promise<boolean>;
   onBeforeSubmitDirectDebit?: () => boolean | Promise<boolean>;
@@ -67,8 +58,6 @@ export interface WpwlOptions {
   onBeforeSubmitVirtualAccount?: () => boolean | Promise<boolean>;
   onBeforeSubmitInlineVirtualAccount?: () => boolean | Promise<boolean>;
   onBeforeSubmitPrepayment?: () => boolean | Promise<boolean>;
-  onBeforeSubmitInvoice?: () => boolean | Promise<boolean>;
-  onBeforeSubmitOnDelivery?: () => boolean | Promise<boolean>;
 
   // --- Callbacks de Interacción de UI ---
   onBlurCardNumber?: () => void;
@@ -87,9 +76,8 @@ export interface WpwlOptions {
   showCVVHint?: boolean;
   allowEmptyCardHolderName?: boolean;
   brandDetection?: boolean;
-  brandDetectionType?: "regex" | "bin";
+  brandDetectionType?: 'regex' | 'bin';
   brandDetectionPriority?: string[]; // Ej: ["VISA", "MASTER"]
-  brandDisplay?: "default" | "images" | "labels";
   disableCardExpiryDateValidation?: boolean;
 
   // --- Registros (One-Click / Tokenización) ---
@@ -102,73 +90,74 @@ export interface WpwlOptions {
 
   // --- Personalización de Textos (I18n) ---
   labels?: {
-    accountBank?: string
-    accountHolder?: string
-    accountNumber?: string
-    bankName?: string
-    brand?: string
-    cancel?: string
-    cardHolder?: string
-    cardNumber?: string
-    country?: string
-    pin?: string
-    pinError?: string
-    pinEmptyError?: string
-    cvv?: string
-    expiryDate?: string
-    submit?: string
-    applyNow?: string
-    nextStep?: string
-    givenName?: string
-    surname?: string
-    accountBankError?: string
-    accountHolderError?: string
-    accountNumberError?: string
-    cardHolderError?: string
-    cardNumberError?: string
-    cardBinError?: string
-    cvvError?: string
-    expiryMonthError?: string
-    expiryYearError?: string
-    learnMore?: string
-    mmyy?: string
-    ddmmyyyy?: string
-    register?: string
-    billingCountryError?: string
-    billingStateError?: string
-    billingCityError?: string
-    billingStreetError?: string
-    billingStreetError2?: string
-    billingPostCodeError?: string
-    billingAddress?: string
-    showOtherPaymentMethods?: string
-    cvvHelp?: string
-    cvvHint?: string
-    cvvHintAmex?: string
-    cvvHintMaestro?: string
-    billingCountryPlaceholder?: string
-    billingStatePlaceholder?: string
-    billingCityPlaceholder?: string
-    billingPostCodePlaceholder?: string
-    billingStreet1Placeholder?: string
-    billingStreet2Placeholder?: string
-    billingStreet2PlaceholderMandatory?: string
+    accountBank?: string;
+    accountHolder?: string;
+    accountNumber?: string;
+    bankName?: string;
+    brand?: string;
+    cancel?: string;
+    cardHolder?: string;
+    cardNumber?: string;
+    country?: string;
+    pin?: string;
+    cvv?: string;
+    expiryDate?: string;
+    submit?: string;
+    applyNow?: string;
+    nextStep?: string;
+    givenName?: string;
+    surname?: string;
+    learnMore?: string;
+    mmyy?: string;
+    ddmmyyyy?: string;
+    register?: string;
+    billingAddress?: string;
+    showOtherPaymentMethods?: string;
+    cvvHelp?: string;
+    cvvHint?: string;
+    cvvHintAmex?: string;
+    cvvHintMaestro?: string;
   };
-  // placeholders?: Record<string, string>;
-  // errorMessages?: Record<string, string>;
+  errorMessages?: {
+    pinError?: string;
+    pinEmptyError?: string;
+    accountBankError?: string;
+    accountHolderError?: string;
+    accountNumberError?: string;
+    cardHolderError?: string;
+    cardNumberError?: string;
+    cardBinError?: string;
+    cvvError?: string;
+    expiryMonthError?: string;
+    expiryYearError?: string;
+  }
 
   // --- UI y Dimensiones ---
-  threeDIframeSize?: {
-    width: string;
-    height: string;
-  };
   iframeStyles?: {
     'card-number-placeholder'?: Record<string, string>;
     'cvv-placeholder'?: Record<string, string>;
-  }
-  spinner?: Record<string, any>;
+  };
+  spinner?: {
+    lines?: number;
+    length?: number;
+    width?: number;
+    radius?: number;
+    scale?: number;
+    corners?: number;
+    speed?: number;
+    rotate?: number;
+    animation?: string;
+    direction?: number;
+    color?: string;
+    fadeColor?: 'transparent', // CSS color or array of colors
+    top?: string;
+    left?: string;
+    shadow?: string;
+    zIndex?: number;
+    className?: string;
+    position?: string;
+  };
 }
-
 
 export type MessageStatus = 'success' | 'error' | 'ping';
 export interface Message {
