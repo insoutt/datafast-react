@@ -11,6 +11,8 @@
   @apply df-py-2 df-px-4 df-rounded-lg df-border !df-border-zinc-200 dark:!df-bg-zinc-900;
 }
 
+
+
 .wpwl-button-pay {
   @apply df-bg-gray-800 df-rounded-lg df-border-black hover:df-border-gray-700 hover:df-bg-gray-900 df-w-full;
 }
@@ -27,7 +29,7 @@ button[data-action="show-initial-forms"] {
 
 /* Inputs */
 .wpwl-control {
-  @apply df-border-0 df-rounded-lg df-pl-2 df-py-2 df-bg-gray-100;
+  @apply df-border-0 df-rounded-lg df-pl-2 df-py-2 df-bg-gray-100 dark:df-text-gray-800;
 }
 
 .wpwl-label, .wpwl-control, .wpwl-wrapper {
