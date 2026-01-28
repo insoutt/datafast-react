@@ -17,6 +17,7 @@ interface Props extends PropsWithChildren {
   onReady?: () => void;
   onError?: (error: any) => void;
   type?: 'redirection' | 'inline';
+  availableBrands?: string[];
   config?: Omit<WpwlOptions, 'style'>;
 }
 
@@ -32,6 +33,7 @@ export function Datafast({
   rememberCardText = 'Recordar tarjeta para futuras compras',
   amount = 0,
   type = 'redirection',
+  availableBrands = ['VISA', 'MASTER', 'AMEX'],
 }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -282,7 +284,7 @@ export function Datafast({
             action={callbackUrl}
             onSubmit={onSubmit}
             className="paymentWidgets"
-            data-brands="VISA MASTER AMEX"
+            data-brands={availableBrands.join(' ')}
           />
         </div>
 
