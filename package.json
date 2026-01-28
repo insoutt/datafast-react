@@ -1,6 +1,6 @@
 {
   "name": "@insoutt/datafast-react",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Base package scaffold for datafast-react.",
   "keywords": [
     "react",

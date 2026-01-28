@@ -1,5 +1,11 @@
 # @insoutt/datafast-react
 
+## 2.0.1
+
+### Patch Changes
+
+- 4797859: Fix test
+
 ## 2.0.0
 
 ### Major Changes
