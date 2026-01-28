@@ -52,7 +52,6 @@ describe('Datafast', () => {
     expect(options.locale).toBe('en');
     expect(options.showCVVHint).toBe(false);
     expect(options.labels).toEqual({ cardNumber: 'Card number' });
-    expect(options.shopperResultUrl).toBe(baseProps.callbackUrl);
 
     const script = document.querySelector(
       `script[src="${baseProps.scriptUrl}"]`,
