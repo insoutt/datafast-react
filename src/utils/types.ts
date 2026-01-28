@@ -40,21 +40,32 @@ export interface WpwlOptions {
   showPlaceholders?: boolean;
 
   // --- Callbacks de Ciclo de Vida ---
-  onReady?: (data: {
-    containerKey: string;
-    ccMethods:    string[];
-  }[]) => void;
+  onReady?: (
+    data: {
+      containerKey: string;
+      ccMethods: string[];
+    }[],
+  ) => void;
   onAfterSubmit?: () => void;
   onError?: (error: {
     brand: string;
-    name: 'InvalidCheckoutIdError' | 'PciIframeSubmitError' | 'PciIframeCommunicationError' | 'WidgetError' | string;
+    name:
+      | 'InvalidCheckoutIdError'
+      | 'PciIframeSubmitError'
+      | 'PciIframeCommunicationError'
+      | 'WidgetError'
+      | string;
     message: string | object;
-    event?: any
+    event?: any;
   }) => void;
   onBeforeSubmitCard?: (event: any) => void;
   onSaveTransactionData?: (data: any) => void;
   onChangeBrand?: (brand: string) => void;
-  onDetectBrand?: (brands: string[], activeBrand: string, cardClassParameter: string) => void;
+  onDetectBrand?: (
+    brands: string[],
+    activeBrand: string,
+    cardClassParameter: string,
+  ) => void;
   onLoadThreeDIframe?: () => void;
 
   // --- Callbacks de Interacción de UI ---
@@ -128,7 +139,7 @@ export interface WpwlOptions {
     cvvError?: string;
     expiryMonthError?: string;
     expiryYearError?: string;
-  }
+  };
 
   // --- UI ---
   spinner?: {
@@ -143,7 +154,7 @@ export interface WpwlOptions {
     animation?: string;
     direction?: number;
     color?: string;
-    fadeColor?: string | string[], // CSS color or array of colors
+    fadeColor?: string | string[]; // CSS color or array of colors
     top?: string;
     left?: string;
     shadow?: string;

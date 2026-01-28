@@ -10,20 +10,20 @@ Renderiza el formulario de pago de Datafast/WPWL y carga el script remoto. Sopor
 
 #### Props
 
-| Prop | Tipo | Requerido | Default | Descripción |
-| --- | --- | --- | --- | --- |
-| `scriptUrl` | `string` | Sí | — | URL del script de Datafast (widget WPWL). |
-| `callbackUrl` | `string` | Sí | — | URL de retorno del pago. En modo `inline` se carga dentro del iframe. |
-| `title` | `string` | No | `Información de pago` | Título del encabezado. |
-| `description` | `string` | No | `Ingresa los datos de tu tarjeta` | Texto descriptivo del encabezado. |
-| `rememberCard` | `boolean` | No | `false` | Muestra el checkbox para recordar tarjeta. |
-| `rememberCardText` | `string` | No | `Recordar tarjeta para futuras compras` | Etiqueta del checkbox de recordar tarjeta. |
-| `amount` | `number` | No | `0` | Muestra el resumen “Total a pagar” cuando es mayor a 0. |
-| `onReady` | `() => void` | No | — | Callback cuando el widget está listo. |
-| `onError` | `(error: any) => void` | No | — | Callback ante error del widget. |
-| `type` | `'redirection' \| 'inline'` | No | `redirection` | Modo de respuesta del pago. `inline` muestra un iframe. |
-| `availableBrands` | `string[]` | No | `['VISA','MASTER','AMEX']` | Marcas de tarjeta disponibles para el widget. |
-| `config` | `Omit<WpwlOptions,'style'>` | No | — | Opciones avanzadas de WPWL (labels, callbacks, etc). |
+| Prop               | Tipo                        | Requerido | Default                                 | Descripción                                                           |
+| ------------------ | --------------------------- | --------- | --------------------------------------- | --------------------------------------------------------------------- |
+| `scriptUrl`        | `string`                    | Sí        | —                                       | URL del script de Datafast (widget WPWL).                             |
+| `callbackUrl`      | `string`                    | Sí        | —                                       | URL de retorno del pago. En modo `inline` se carga dentro del iframe. |
+| `title`            | `string`                    | No        | `Información de pago`                   | Título del encabezado.                                                |
+| `description`      | `string`                    | No        | `Ingresa los datos de tu tarjeta`       | Texto descriptivo del encabezado.                                     |
+| `rememberCard`     | `boolean`                   | No        | `false`                                 | Muestra el checkbox para recordar tarjeta.                            |
+| `rememberCardText` | `string`                    | No        | `Recordar tarjeta para futuras compras` | Etiqueta del checkbox de recordar tarjeta.                            |
+| `amount`           | `number`                    | No        | `0`                                     | Muestra el resumen “Total a pagar” cuando es mayor a 0.               |
+| `onReady`          | `() => void`                | No        | —                                       | Callback cuando el widget está listo.                                 |
+| `onError`          | `(error: any) => void`      | No        | —                                       | Callback ante error del widget.                                       |
+| `type`             | `'redirection' \| 'inline'` | No        | `redirection`                           | Modo de respuesta del pago. `inline` muestra un iframe.               |
+| `availableBrands`  | `string[]`                  | No        | `['VISA','MASTER','AMEX']`              | Marcas de tarjeta disponibles para el widget.                         |
+| `config`           | `Omit<WpwlOptions,'style'>` | No        | —                                       | Opciones avanzadas de WPWL (labels, callbacks, etc).                  |
 
 #### Ejemplo mínimo
 
@@ -45,16 +45,16 @@ Botón que crea el checkout y devuelve `checkoutId` y `scriptUrl` para renderiza
 
 #### Props
 
-| Prop | Tipo | Requerido | Default | Descripción |
-| --- | --- | --- | --- | --- |
-| `url` | `string` | Sí | — | Endpoint backend que crea el checkout. |
-| `checkoutData` | `CheckoutData` | Sí | — | Datos del cliente y carrito enviados al backend. |
-| `onSuccess` | `(data: { checkoutId: string; scriptUrl: string }) => void` | Sí | — | Se ejecuta cuando el backend retorna el checkout. |
-| `onError` | `(error: Error) => void` | Sí | — | Se ejecuta cuando falla la creación del checkout. |
-| `text` | `string` | No | `Pagar con tarjeta` | Texto del botón por defecto. |
-| `isTest` | `boolean` | No | `true` | Usa el script de entorno de pruebas. |
-| `variant` | `'primary' \| 'dark'` | No | `primary` | Estilo visual del botón. |
-| `children` | `(props: { isLoading: boolean; createCheckout: () => void }) => ReactNode` | No | — | Render-prop para UI personalizado. |
+| Prop           | Tipo                                                                       | Requerido | Default             | Descripción                                       |
+| -------------- | -------------------------------------------------------------------------- | --------- | ------------------- | ------------------------------------------------- |
+| `url`          | `string`                                                                   | Sí        | —                   | Endpoint backend que crea el checkout.            |
+| `checkoutData` | `CheckoutData`                                                             | Sí        | —                   | Datos del cliente y carrito enviados al backend.  |
+| `onSuccess`    | `(data: { checkoutId: string; scriptUrl: string }) => void`                | Sí        | —                   | Se ejecuta cuando el backend retorna el checkout. |
+| `onError`      | `(error: Error) => void`                                                   | Sí        | —                   | Se ejecuta cuando falla la creación del checkout. |
+| `text`         | `string`                                                                   | No        | `Pagar con tarjeta` | Texto del botón por defecto.                      |
+| `isTest`       | `boolean`                                                                  | No        | `true`              | Usa el script de entorno de pruebas.              |
+| `variant`      | `'primary' \| 'dark'`                                                      | No        | `primary`           | Estilo visual del botón.                          |
+| `children`     | `(props: { isLoading: boolean; createCheckout: () => void }) => ReactNode` | No        | —                   | Render-prop para UI personalizado.                |
 
 `CheckoutData` incluye `customer` (datos del cliente) y `cart.items` (items del carrito).
 
@@ -117,8 +117,8 @@ function CheckoutExample() {
 }
 ```
 
-
 ## Contact
+
 - 𝕏 (Twitter): [@insoutt](http://x.com/insoutt)
 - Sitio Web: [elvisfernando.com](https://elvisfernando.com)
 

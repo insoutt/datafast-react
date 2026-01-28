@@ -70,10 +70,12 @@ export function Datafast({
     window.wpwlOptions = {
       ...customConfig,
       style: 'plain',
-      onReady: (data: {
-        containerKey: string;
-        ccMethods:    string[];
-      }[]) => {
+      onReady: (
+        data: {
+          containerKey: string;
+          ccMethods: string[];
+        }[],
+      ) => {
         console.log('ready DatafastBox');
 
         const cardHolderGroup = document.querySelector(
