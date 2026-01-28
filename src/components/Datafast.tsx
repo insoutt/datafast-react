@@ -232,7 +232,7 @@ export function Datafast({
 
   const setupScript = () => {
     const script = document.createElement('script');
-    script.src =  getScriptUrl(isTest, checkoutId);
+    script.src = getScriptUrl(isTest, checkoutId);
     document.body.appendChild(script);
     return script;
   };

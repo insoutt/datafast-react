@@ -12,7 +12,7 @@ Renderiza el formulario de pago de Datafast y carga el script remoto. Soporta mo
 
 | Prop               | Tipo                        | Requerido | Default                                 | Descripción                                                           |
 | ------------------ | --------------------------- | --------- | --------------------------------------- | --------------------------------------------------------------------- |
-| `checkoutId`        | `string`                    | Sí        | —                                       | ID de pago generado en el backend.                             |
+| `checkoutId`       | `string`                    | Sí        | —                                       | ID de pago generado en el backend.                                    |
 | `callbackUrl`      | `string`                    | Sí        | —                                       | URL de retorno del pago. En modo `inline` se carga dentro del iframe. |
 | `title`            | `string`                    | No        | `Información de pago`                   | Título del encabezado.                                                |
 | `description`      | `string`                    | No        | `Ingresa los datos de tu tarjeta`       | Texto descriptivo del encabezado.                                     |
@@ -24,7 +24,7 @@ Renderiza el formulario de pago de Datafast y carga el script remoto. Soporta mo
 | `type`             | `'redirection' \| 'inline'` | No        | `redirection`                           | Modo de respuesta del pago. `inline` muestra un iframe.               |
 | `availableBrands`  | `string[]`                  | No        | `['VISA','MASTER','AMEX']`              | Marcas de tarjeta disponibles para el widget.                         |
 | `config`           | `Omit<WpwlOptions,'style'>` | No        | —                                       | Opciones avanzadas de WPWL (labels, callbacks, etc).                  |
-| `isTest`       | `boolean`                                                                  | No        | `true`              | Usa el script de entorno de pruebas.              |
+| `isTest`           | `boolean`                   | No        | `true`                                  | Usa el script de entorno de pruebas.                                  |
 
 #### Ejemplo mínimo
 
@@ -49,7 +49,7 @@ Botón que crea el checkout y devuelve `checkoutId` para renderizar el widget de
 | -------------- | -------------------------------------------------------------------------- | --------- | ------------------- | ------------------------------------------------- |
 | `url`          | `string`                                                                   | Sí        | —                   | Endpoint backend que crea el checkout.            |
 | `checkoutData` | `CheckoutData`                                                             | Sí        | —                   | Datos del cliente y carrito enviados al backend.  |
-| `onSuccess`    | `(data: { checkoutId: string; }) => void`                | Sí        | —                   | Se ejecuta cuando el backend retorna el checkout. |
+| `onSuccess`    | `(data: { checkoutId: string; }) => void`                                  | Sí        | —                   | Se ejecuta cuando el backend retorna el checkout. |
 | `onError`      | `(error: Error) => void`                                                   | Sí        | —                   | Se ejecuta cuando falla la creación del checkout. |
 | `text`         | `string`                                                                   | No        | `Pagar con tarjeta` | Texto del botón por defecto.                      |
 | `variant`      | `'primary' \| 'dark'`                                                      | No        | `primary`           | Estilo visual del botón.                          |
@@ -136,7 +136,7 @@ import { PaymentButton } from '@insoutt/datafast-react';
       {isLoading ? 'Procesando...' : 'Pagar ahora'}
     </button>
   )}
-</PaymentButton>
+</PaymentButton>;
 ```
 
 ## Contact
