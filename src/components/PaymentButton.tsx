@@ -3,13 +3,19 @@ import type { CheckoutData } from "../utils/types.js";
 import { getScriptUrl } from "../utils/helpers.js";
 import { cva, type VariantProps } from "class-variance-authority";
 import Spinner from "../icons/Spinner.js";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import CreditCard from "../icons/CreditCard.js";
 
 interface SuccessData {
   checkoutId: string;
   scriptUrl: string;
 }
+
+type PaymentButtonRenderProps = {
+  isLoading: boolean;
+  createCheckout: () => void;
+};
+
 interface PaymentButtonProps extends VariantProps<typeof ButtonVariant> {
   url: string;
   checkoutData: CheckoutData;
@@ -17,6 +23,7 @@ interface PaymentButtonProps extends VariantProps<typeof ButtonVariant> {
   onError: (error: Error) => void;
   text?: string;
   isTest: boolean;
+  children?: (props: PaymentButtonRenderProps) => ReactNode;
 }
 
 export const PaymentButton = ({
@@ -24,37 +31,39 @@ export const PaymentButton = ({
   onSuccess,
   onError,
   text = 'Pagar con tarjeta',
-  isTest,
+  isTest = true,
   variant,
+  children,
 }: PaymentButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isError, setIsError] = useState(false);
 
-  const createCheckoutId = () => {
+  const createCheckout = () => {
     setIsLoading(true);
-    setIsSuccess(false);
-    setIsError(false);
-    axios.post(url, checkoutData).then((response) => {
-      setIsSuccess(true);
-      setIsError(false);
+    axios.post(url, checkoutData, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    }).then((response) => {
       onSuccess({
         checkoutId: response.data.data.id,
         scriptUrl: getScriptUrl(isTest, response.data.data.id)
       });
-    }).catch((error) => {
-      setIsSuccess(false);
-      setIsError(true);
-      onError(error);
-    }).finally(() => {
-      setIsLoading(false);
-    });
+    }).catch((error) => onError(error))
+    .finally(() => setIsLoading(false));
   };
-  return <button onClick={createCheckoutId} className={ButtonVariant({ variant, disabled: isLoading })}>
+
+  if(children) {
+    return children({
+      isLoading,
+      createCheckout,
+    });
+  }
+
+  return <button onClick={createCheckout} className={ButtonVariant({ variant, disabled: isLoading })}>
     {isLoading
       ? <Spinner className="df-size-4 df-animate-spin" />
-      : <CreditCard className="df-size-4" />
-    }
+      : <CreditCard className="df-size-4" />}
     {text}
   </button>;
 };
