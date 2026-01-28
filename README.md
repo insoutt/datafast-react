@@ -116,6 +116,29 @@ function CheckoutExample() {
 }
 ```
 
+#### Ejemplo botón de pagos personalizado
+
+```tsx
+import { PaymentButton } from '@insoutt/datafast-react';
+
+<PaymentButton
+  url="https://mi-backend.com/checkout"
+  checkoutData={checkoutData}
+  onSuccess={({ checkoutId }) => console.log('checkoutId', checkoutId)}
+  onError={(error) => console.error(error)}
+>
+  {({ isLoading, createCheckout }) => (
+    <button
+      onClick={createCheckout}
+      disabled={isLoading}
+      className="mi-boton-personalizado"
+    >
+      {isLoading ? 'Procesando...' : 'Pagar ahora'}
+    </button>
+  )}
+</PaymentButton>
+```
+
 ## Contact
 
 - 𝕏 (Twitter): [@insoutt](http://x.com/insoutt)
