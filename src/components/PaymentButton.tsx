@@ -8,7 +8,6 @@ import CreditCard from '../icons/CreditCard.js';
 
 interface SuccessData {
   checkoutId: string;
-  scriptUrl: string;
 }
 
 type PaymentButtonRenderProps = {
@@ -22,7 +21,6 @@ interface PaymentButtonProps extends VariantProps<typeof ButtonVariant> {
   onSuccess: (data: SuccessData) => void;
   onError: (error: Error) => void;
   text?: string;
-  isTest: boolean;
   children?: (props: PaymentButtonRenderProps) => ReactNode;
 }
 
@@ -32,7 +30,6 @@ export const PaymentButton = ({
   onSuccess,
   onError,
   text = 'Pagar con tarjeta',
-  isTest = true,
   variant,
   children,
 }: PaymentButtonProps) => {
@@ -50,7 +47,6 @@ export const PaymentButton = ({
       .then((response) => {
         onSuccess({
           checkoutId: response.data.data.id,
-          scriptUrl: getScriptUrl(isTest, response.data.data.id),
         });
       })
       .catch((error) => onError(error))

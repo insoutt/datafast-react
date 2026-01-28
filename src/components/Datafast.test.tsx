@@ -2,9 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render } from '@testing-library/react';
 import { Datafast } from './Datafast.js';
+import { getScriptUrl } from '../utils/helpers.js';
 
 const baseProps = {
-  scriptUrl: 'https://example.com/paymentWidgets.js',
+  checkoutId: 'SII3093309.uat01-vm-tx01',
   callbackUrl: 'https://example.com/callback',
 };
 
@@ -54,14 +55,14 @@ describe('Datafast', () => {
     expect(options.labels).toEqual({ cardNumber: 'Card number' });
 
     const script = document.querySelector(
-      `script[src="${baseProps.scriptUrl}"]`,
+      `script[src="${getScriptUrl(true, baseProps.checkoutId)}"]`,
     );
     expect(script).not.toBeNull();
 
     unmount();
 
     const removedScript = document.querySelector(
-      `script[src="${baseProps.scriptUrl}"]`,
+      `script[src="${getScriptUrl(true, baseProps.checkoutId)}"]`,
     );
     expect(removedScript).toBeNull();
   });

@@ -62,7 +62,6 @@ describe('PaymentButton', () => {
         checkoutData={checkoutData}
         onSuccess={onSuccess}
         onError={onError}
-        isTest
       />,
     );
 
@@ -82,8 +81,6 @@ describe('PaymentButton', () => {
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledWith({
         checkoutId: 'checkout_123',
-        scriptUrl:
-          'https://example.com/paymentWidgets.js?checkoutId=checkout_123',
       });
     });
     expect(onError).not.toHaveBeenCalled();
@@ -106,7 +103,6 @@ describe('PaymentButton', () => {
         checkoutData={checkoutData}
         onSuccess={onSuccess}
         onError={onError}
-        isTest
       />,
     );
 
@@ -134,7 +130,6 @@ describe('PaymentButton', () => {
         checkoutData={checkoutData}
         onSuccess={onSuccess}
         onError={onError}
-        isTest
       />,
     );
 

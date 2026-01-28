@@ -1,13 +1,13 @@
 import { useEffect, useState, type PropsWithChildren } from 'react';
 import ShieldCheck from '../icons/ShieldCheck.js';
 import type { WpwlOptions } from '../utils/types.js';
-import { getInnerText } from '../utils/helpers.js';
+import { getInnerText, getScriptUrl } from '../utils/helpers.js';
 
 interface Props extends PropsWithChildren {
-  scriptUrl: string;
+  checkoutId: string;
   callbackUrl: string;
 
-  // Settings
+  isTest?: boolean;
   title?: string;
   description?: string;
   rememberCard?: boolean;
@@ -19,7 +19,8 @@ interface Props extends PropsWithChildren {
 }
 
 export function Datafast({
-  scriptUrl,
+  checkoutId,
+  isTest = true,
   callbackUrl,
   config,
   title = 'Información de pago',
@@ -231,7 +232,7 @@ export function Datafast({
 
   const setupScript = () => {
     const script = document.createElement('script');
-    script.src = scriptUrl;
+    script.src =  getScriptUrl(isTest, checkoutId);
     document.body.appendChild(script);
     return script;
   };
