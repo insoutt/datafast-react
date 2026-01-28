@@ -117,8 +117,6 @@ export interface WpwlOptions {
     cvvHint?: string;
     cvvHintAmex?: string;
     cvvHintMaestro?: string;
-  };
-  errorMessages?: {
     pinError?: string;
     pinEmptyError?: string;
     accountBankError?: string;
@@ -130,32 +128,11 @@ export interface WpwlOptions {
     cvvError?: string;
     expiryMonthError?: string;
     expiryYearError?: string;
-  }
+  };
 
-  // --- UI y Dimensiones ---
   iframeStyles?: {
     'card-number-placeholder'?: Record<string, string>;
     'cvv-placeholder'?: Record<string, string>;
-  };
-  spinner?: {
-    lines?: number;
-    length?: number;
-    width?: number;
-    radius?: number;
-    scale?: number;
-    corners?: number;
-    speed?: number;
-    rotate?: number;
-    animation?: string;
-    direction?: number;
-    color?: string;
-    fadeColor?: 'transparent', // CSS color or array of colors
-    top?: string;
-    left?: string;
-    shadow?: string;
-    zIndex?: number;
-    className?: string;
-    position?: string;
   };
 }
 
