@@ -6,7 +6,7 @@
 
 ### Datafast
 
-Renderiza el formulario de pago de Datafast/WPWL y carga el script remoto. Soporta modo redirection e inline (iframe de respuesta) y permite personalizar textos y comportamiento del widget.
+Renderiza el formulario de pago de Datafast y carga el script remoto. Soporta modo redirection e inline (iframe de respuesta) y permite personalizar textos y comportamiento del widget.
 
 #### Props
 
