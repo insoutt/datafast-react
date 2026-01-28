@@ -13,9 +13,6 @@ interface Props extends PropsWithChildren {
   rememberCard?: boolean;
   rememberCardText?: string;
   amount?: number;
-
-  onReady?: () => void;
-  onError?: (error: any) => void;
   type?: 'redirection' | 'inline';
   availableBrands?: string[];
   config?: Omit<WpwlOptions, 'style'>;
@@ -24,8 +21,6 @@ interface Props extends PropsWithChildren {
 export function Datafast({
   scriptUrl,
   callbackUrl,
-  onReady,
-  onError,
   config,
   title = 'Información de pago',
   description = 'Ingresa los datos de tu tarjeta',
@@ -70,24 +65,16 @@ export function Datafast({
       ...defaultConfig,
       ...config,
     };
+
     // @ts-ignore
     window.wpwlOptions = {
+      ...customConfig,
       style: 'plain',
-      locale: customConfig.locale,
-      showCVVHint: customConfig.showCVVHint,
-      labels: customConfig.labels,
-      registrations: customConfig.registrations,
-
-      paymentTarget: 'wp_iframe_response',
-
-      // Define que la página de respuesta (shopperResultUrl) se cargue en el iframe
-      shopperResultTarget: 'wp_iframe_response',
-
-      // Tu URL de respuesta normal (esta se cargará DENTRO del iframe)
-      shopperResultUrl: callbackUrl,
-
-      onReady: () => {
-        console.log('ready DatafastBox', callbackUrl);
+      onReady: (data: {
+        containerKey: string;
+        ccMethods:    string[];
+      }[]) => {
+        console.log('ready DatafastBox');
 
         const cardHolderGroup = document.querySelector(
           '.wpwl-group-cardHolder',
@@ -174,12 +161,12 @@ export function Datafast({
           button?.insertAdjacentHTML('beforebegin', createRegistrationHtml);
         }
 
-        onReady?.();
+        config?.onReady?.(data);
       },
-      onAfterSubmit: () => {
-        console.log('onAfterSubmit Payment');
-      },
-      onBeforeSubmitCard: () => {
+      onBeforeSubmitCard: (event: any) => {
+        if (config?.onBeforeSubmitCard) {
+          return config?.onBeforeSubmitCard(event);
+        }
         // @ts-ignore
         if (document.querySelector('.wpwl-control-cardHolder')?.value === '') {
           document
@@ -196,10 +183,6 @@ export function Datafast({
         } else {
           return true;
         }
-      },
-      onError: (error: any) => {
-        onError?.(error);
-        console.log('onError Payment', error);
       },
     };
   };

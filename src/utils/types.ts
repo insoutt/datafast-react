@@ -40,34 +40,31 @@ export interface WpwlOptions {
   showPlaceholders?: boolean;
 
   // --- Callbacks de Ciclo de Vida ---
-  onReady?: () => void;
-  onReadyExternal?: () => void;
+  onReady?: (data: {
+    containerKey: string;
+    ccMethods:    string[];
+  }[]) => void;
   onAfterSubmit?: () => void;
-  onError?: (error: { name: string; message: string; stack?: string }) => void;
-  onLightboxCancel?: () => void;
+  onError?: (error: {
+    brand: string;
+    name: 'InvalidCheckoutIdError' | 'PciIframeSubmitError' | 'PciIframeCommunicationError' | 'WidgetError' | string;
+    message: string | object;
+    event?: any
+  }) => void;
+  onBeforeSubmitCard?: (event: any) => void;
   onSaveTransactionData?: (data: any) => void;
   onChangeBrand?: (brand: string) => void;
-  onDetectBrand?: (brand: string) => void;
-  onDetectBin?: (bin: string) => void;
-
-  // --- Callbacks de Validación y Envío ---
-  onBeforeSubmitCard?: () => boolean | Promise<boolean>;
-  onBeforeSubmitOneClickCard?: () => boolean | Promise<boolean>;
-  onBeforeSubmitDirectDebit?: () => boolean | Promise<boolean>;
-  onBeforeSubmitOnlineTransfer?: () => boolean | Promise<boolean>;
-  onBeforeSubmitVirtualAccount?: () => boolean | Promise<boolean>;
-  onBeforeSubmitInlineVirtualAccount?: () => boolean | Promise<boolean>;
-  onBeforeSubmitPrepayment?: () => boolean | Promise<boolean>;
+  onDetectBrand?: (brands: string[], activeBrand: string, cardClassParameter: string) => void;
+  onLoadThreeDIframe?: () => void;
 
   // --- Callbacks de Interacción de UI ---
-  onBlurCardNumber?: () => void;
-  onBlurSecurityCode?: () => void;
-  onBlurCardHolder?: () => void;
-  onBlurExpiryDate?: () => void;
-  onReadyIframeCommunication?: () => void;
+  onBlurCardNumber?: (isValid: boolean) => void;
+  onBlurSecurityCode?: (isValid: boolean) => void;
+  onBlurCardHolder?: (isValid: boolean) => void;
+  onBlurExpiryDate?: (isValid: boolean) => void;
+  onReadyIframeCommunication?: (data: { $iframe: any }) => void;
   onFocusIframeCommunication?: (data: { $iframe: any }) => void;
   onBlurIframeCommunication?: (data: { $iframe: any }) => void;
-  onLoadThreeDIframe?: () => void;
 
   // --- Configuración de Tarjetas ---
   requireCvv?: boolean;
@@ -117,6 +114,9 @@ export interface WpwlOptions {
     cvvHint?: string;
     cvvHintAmex?: string;
     cvvHintMaestro?: string;
+  };
+
+  errorMessages?: {
     pinError?: string;
     pinEmptyError?: string;
     accountBankError?: string;
@@ -128,6 +128,28 @@ export interface WpwlOptions {
     cvvError?: string;
     expiryMonthError?: string;
     expiryYearError?: string;
+  }
+
+  // --- UI ---
+  spinner?: {
+    lines?: number;
+    length?: number;
+    width?: number;
+    radius?: number;
+    scale?: number;
+    corners?: number;
+    speed?: number;
+    rotate?: number;
+    animation?: string;
+    direction?: number;
+    color?: string;
+    fadeColor?: string | string[], // CSS color or array of colors
+    top?: string;
+    left?: string;
+    shadow?: string;
+    zIndex?: number;
+    className?: string;
+    position?: string;
   };
 
   iframeStyles?: {
