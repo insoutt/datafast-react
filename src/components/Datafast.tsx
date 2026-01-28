@@ -1,95 +1,69 @@
 import {useEffect, useState, type PropsWithChildren} from "react";
 import ShieldCheck from "../icons/ShieldCheck.js";
+import type { WpwlOptions } from "../utils/types.js";
 
 interface Props extends PropsWithChildren {
   scriptUrl: string
   callbackUrl: string
+
+  // Settings
+  title?: string
+  description?: string
+  rememberCard?: boolean
+  rememberCardText?: string
+  amount?: number
+
   onReady?: () => void
-  onSuccess?: () => void
   onError?: (error: any) => void
-  config?: {
-    locale?: 'es' | 'en'
-    showCVVHint?: boolean
-    labels?: {
-      accountBank?: string
-      accountHolder?: string
-      accountNumber?: string
-      bankName?: string
-      brand?: string
-      cancel?: string
-      cardHolder?: string
-      cardNumber?: string
-      country?: string
-      pin?: string
-      pinError?: string
-      pinEmptyError?: string
-      cvv?: string
-      expiryDate?: string
-      submit?: string
-      applyNow?: string
-      nextStep?: string
-      givenName?: string
-      surname?: string
-      accountBankError?: string
-      accountHolderError?: string
-      accountNumberError?: string
-      cardHolderError?: string
-      cardNumberError?: string
-      cardBinError?: string
-      cvvError?: string
-      expiryMonthError?: string
-      expiryYearError?: string
-      learnMore?: string
-      mmyy?: string
-      ddmmyyyy?: string
-      register?: string
-      billingCountryError?: string
-      billingStateError?: string
-      billingCityError?: string
-      billingStreetError?: string
-      billingStreetError2?: string
-      billingPostCodeError?: string
-      billingAddress?: string
-      showOtherPaymentMethods?: string
-      cvvHelp?: string
-      cvvHint?: string
-      cvvHintAmex?: string
-      cvvHintMaestro?: string
-      billingCountryPlaceholder?: string
-      billingStatePlaceholder?: string
-      billingCityPlaceholder?: string
-      billingPostCodePlaceholder?: string
-      billingStreet1Placeholder?: string
-      billingStreet2Placeholder?: string
-      billingStreet2PlaceholderMandatory?: string
-  },
-    registrations?: {
-      requireCvv: boolean
-      hideInitialPaymentForms: boolean
-    }
-  }
+  type: 'redirection' | 'inline'
+  config?: Omit<WpwlOptions, 'style'>
 }
 
-export function Datafast({scriptUrl, callbackUrl, onReady, onSuccess, onError, config  }: Props) {
+export function Datafast({
+  scriptUrl,
+  callbackUrl,
+  onReady,
+  onError,
+  config,
+  title = 'Información de pago',
+  description = 'Ingresa los datos de tu tarjeta',
+  rememberCard = false,
+  rememberCardText = 'Recordar tarjeta para futuras compras',
+  amount = 0,
+  type = 'redirection',
+}: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
 
   useEffect(() => {
       setConfig();
 
       const loadingObserver = setupLoading();
       const script = setupScript();
+
+      window.addEventListener("message", onMessage, false);
+
       return () => {
-        loadingObserver.disconnect();
         script.remove();
+        loadingObserver.disconnect();
+        window.removeEventListener("message", onMessage);
       };
+
   }, []);
 
   const setConfig = () => {
-    const defaultConfig = {
+    const defaultConfig: WpwlOptions = {
       locale: "es",
       showCVVHint: true,
     }
+
+    if(type === 'inline') {
+      defaultConfig.paymentTarget = "wp_iframe_response";
+      // Define que la página de respuesta (shopperResultUrl) se cargue en el iframe
+      defaultConfig.shopperResultTarget = "wp_iframe_response";
+      // Tu URL de respuesta normal (esta se cargará DENTRO del iframe)
+      defaultConfig.shopperResultUrl = callbackUrl;
+    }
+
     const customConfig = {
       ...defaultConfig,
       ...config,
@@ -102,56 +76,76 @@ export function Datafast({scriptUrl, callbackUrl, onReady, onSuccess, onError, c
       labels: customConfig.labels,
       registrations: customConfig.registrations,
 
+      paymentTarget: "wp_iframe_response",
+
+      // Define que la página de respuesta (shopperResultUrl) se cargue en el iframe
+      shopperResultTarget: "wp_iframe_response",
+
+      // Tu URL de respuesta normal (esta se cargará DENTRO del iframe)
+      shopperResultUrl: callbackUrl,
+
       onReady: () => {
-        onReady?.();
-          console.log('ready DatafastBox');
+        console.log('ready DatafastBox', callbackUrl);
 
-          const cardContainer = document.querySelectorAll('.wpwl-group-registration');
-          if(cardContainer) {
-            cardContainer.forEach((container) => {
-              const checkbox = container.querySelectorAll('.wpwl-wrapper-registration-registrationId')[0]
-              // @ts-ignore
-              const registrationNumber = container.querySelectorAll('.wpwl-wrapper-registration-number')[0].innerText.replace('**', '');
-              // @ts-ignore
-              const expiryDate = container.querySelectorAll('.wpwl-wrapper-registration-expiry')[0].innerText
-              // @ts-ignore
-              const holderName = container.querySelectorAll('.wpwl-wrapper-registration-holder')[0].innerText
-              // @ts-ignore
-              const brand = container.querySelectorAll('.wpwl-wrapper-registration-brand')[0]
-              const details = container.querySelectorAll('.wpwl-wrapper-registration-details')[0]
+        const cardHolderGroup = document.querySelector(".wpwl-group-cardHolder");
+        const expiryGroup = document.querySelector(".wpwl-group-expiry");
+        const cardCvvGroup = document.querySelector(".wpwl-group-cvv");
 
-              if(checkbox && brand && details) {
-                checkbox.innerHTML = `<div class="flex items-center gap-2">` + checkbox.innerHTML + `
-                  <div class="flex h-10 w-16 ml-2 items-center justify-center rounded bg-white">
-                      ${brand.innerHTML}
+        if (cardHolderGroup && expiryGroup && cardCvvGroup) {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'df-flex wpwl-wrapper df-gap-2 mt-2';
+          wrapper.appendChild(expiryGroup);
+          wrapper.appendChild(cardCvvGroup);
+          cardHolderGroup.appendChild(wrapper);
+        }
+
+        const cardContainer = document.querySelectorAll('.wpwl-group-registration');
+        if(cardContainer) {
+          cardContainer.forEach((container) => {
+            const checkbox = container.querySelectorAll('.wpwl-wrapper-registration-registrationId')[0]
+            // @ts-ignore
+            const registrationNumber = container.querySelectorAll('.wpwl-wrapper-registration-number')[0].innerText.replace('**', '');
+            // @ts-ignore
+            const expiryDate = container.querySelectorAll('.wpwl-wrapper-registration-expiry')[0].innerText
+            // @ts-ignore
+            const holderName = container.querySelectorAll('.wpwl-wrapper-registration-holder')[0].innerText
+            // @ts-ignore
+            const brand = container.querySelectorAll('.wpwl-wrapper-registration-brand')[0]
+            const details = container.querySelectorAll('.wpwl-wrapper-registration-details')[0]
+
+            if(checkbox && brand && details) {
+              checkbox.innerHTML = `<div class="flex items-center gap-2">` + checkbox.innerHTML + `
+                <div class="flex h-10 w-16 ml-2 items-center justify-center rounded bg-white">
+                    ${brand.innerHTML}
+                </div>
+                <div>
+                  <div class="sm:truncate text-sm font-mono"><sup><span class="hidden sm:inline">**** ****</span> ****</sup> ${registrationNumber}</div>
+                  <div class="sm:truncate text-xs">
+                    <span>${holderName}</span>
+                    <span> - Vence ${expiryDate}</span>
                   </div>
-                  <div>
-                    <div class="sm:truncate text-sm font-mono"><sup><span class="hidden sm:inline">**** ****</span> ****</sup> ${registrationNumber}</div>
-                    <div class="sm:truncate text-xs text-gray-700">
-                      <span>${holderName}</span>
-                      <span> - Vence ${expiryDate}</span>
-                    </div>
-                  </div>
-                </div>`;
-                brand.remove();
-                details.remove();
-              }
-            });
-          }
+                </div>
+              </div>`;
+              brand.remove();
+              details.remove();
+            }
+          });
+        }
 
 
-          const datafastHtml = '<div class="dt-poweredby"><img src="https://www.datafast.com.ec/images/verified.png" style="display:block;margin:0 auto; width:100%;"><div/>';
-          const wpwlFormCard = document.querySelector('form.wpwl-form-card');
-          const wpwlButton = wpwlFormCard?.querySelector('.wpwl-button');
-          wpwlButton?.insertAdjacentHTML('beforebegin', datafastHtml);
+        const datafastHtml = '<div class="dt-poweredby"><img src="https://www.datafast.com.ec/images/verified.png" style="display:block;margin:0 auto; width:100%;"><div/>';
+        const wpwlFormCard = document.querySelector('form.wpwl-form-card');
+        const wpwlButton = wpwlFormCard?.querySelector('.wpwl-button');
+        wpwlButton?.insertAdjacentHTML('beforebegin', datafastHtml);
 
+        if(rememberCard) {
           // Remember card checkbox
           const createRegistrationHtml = `
               <div class="wpwl--remember-box">
                   <div class="wpwl--header">
                       <input id="remember" type="checkbox" name="createRegistration" class="wpwl--checkbox"/>
                       <label class="wpwl--remember-label" for="remember">
-                          Recordar tarjeta para futuras compras
+                          ${rememberCardText}
                       </label>
                   </div>
               </div>
@@ -160,6 +154,9 @@ export function Datafast({scriptUrl, callbackUrl, onReady, onSuccess, onError, c
           // @ts-ignore
           const button = form.querySelector('.wpwl-button');
           button?.insertAdjacentHTML('beforebegin', createRegistrationHtml);
+        }
+
+        onReady?.();
 
       },
       onAfterSubmit: () => {
@@ -188,6 +185,12 @@ export function Datafast({scriptUrl, callbackUrl, onReady, onSuccess, onError, c
     }
   }
 
+  const onMessage = (event: any) => {
+    if(typeof event?.data?.status !== 'undefined') {
+      console.log('received from', event.data);
+    }
+  }
+
   const setupLoading = () => {
     const observer = new MutationObserver((mutations) => {
       const container = document.getElementById('wpwl-registrations');
@@ -209,7 +212,7 @@ export function Datafast({scriptUrl, callbackUrl, onReady, onSuccess, onError, c
         `
       } else if (!spinner) {
         setIsLoading(false);
-        console.log('Spinner not found');
+        // console.log('Spinner not found');
 
       }
     });
@@ -230,30 +233,26 @@ export function Datafast({scriptUrl, callbackUrl, onReady, onSuccess, onError, c
     return script;
   }
 
-  const total = 0;
-
   const onSubmit = (event: any) => {
       event?.preventDefault();
       console.log('submit', event);
   }
 
-
-
-  return (<div className="df-min-h-screen df-border df-bg-blue-200 df-bg-white ">
+  return (<div className="df-min-h-screen df-border df-bg-white dark:df-bg-zinc-900">
     {isLoading && <div className="df-h-screen df-w-full df-absolute df-top-0 df-left-0 df-bg-black/50 df-z-50 df-flex df-items-center df-justify-center"/>}
-    <div className="df-w-full df-max-w-lg df-rounded-lg df-border df-border-border df-bg-card df-mx-auto">
+    <div className="df-w-full df-max-w-lg df-rounded-lg df-border df-border-zinc-200 dark:df-border-zinc-700 df-bg-card df-mx-auto df-bg-white dark:df-bg-zinc-900">
         {/* Header */}
-        <div className="df-border-b df-border-border df-p-6">
+        <div className="df-border-b df-border-zinc-200 dark:df-border-zinc-700 df-p-6">
           <div className="df-flex df-items-center df-justify-between">
             <div>
-              <h2 className="df-text-lg df-font-semibold df-tracking-tight df-text-foreground">
-                Información de pago
+              <h2 className="df-text-lg df-font-semibold df-tracking-tight">
+                {title}
               </h2>
               <p className="df-mt-1 df-text-sm df-text-muted-foreground">
-                Ingresa los datos de tu tarjeta
+                {description}
               </p>
             </div>
-            <div className="df-flex df-items-center df-gap-1 df-rounded-full df-bg-gray-100 df-px-3 df-py-1.5 df-text-xs df-text-muted-foreground">
+            <div className="df-flex df-items-center df-gap-1 df-rounded-full df-bg-zinc-100 dark:df-bg-zinc-700 df-px-3 df-py-1.5 df-text-xs df-text-muted-foreground">
               <ShieldCheck className="df-size-3.5 df-text-green-600" />
               <span>Seguro</span>
             </div>
@@ -263,13 +262,17 @@ export function Datafast({scriptUrl, callbackUrl, onReady, onSuccess, onError, c
           <form action={callbackUrl} onSubmit={onSubmit} className="paymentWidgets" data-brands="VISA MASTER AMEX"/>
         </div>
 
+        {type === 'inline' && <div>
+          <iframe name="wp_iframe_response" id="wp_iframe_response"></iframe>
+        </div>}
+
         {/* Order Summary */}
-        <div className="df-rounded-lg df-bg-gray-50 df-p-4">
+        {(amount > 0) && <div className="df-rounded-lg df-bg-gray-50 df-p-4">
           <div className="df-flex df-items-center df-justify-between">
             <span className="df-text-sm df-text-muted-foreground">Total a pagar</span>
-            <span className="df-text-xl df-font-semibold df-text-foreground">${total.toFixed(2)}</span>
+            <span className="df-text-xl df-font-semibold df-text-foreground">${amount.toFixed(2)}</span>
           </div>
-        </div>
+        </div>}
     </div>
   </div>)
 }
