@@ -2,6 +2,15 @@
 
 `@insoutt/datafast-react` es una librería de React que permite integrar [Datafast](https://datafast.com.ec) y facilita la interacción con el flujo de pago. Permite implementar una interfaz personalizada y robusta sobre el widget de Datafast de manera rápida.
 
+## Instalación
+Para instalar ejecuta el siguiente comando en el proyecto: `yarn add @insoutt/datafast-react` o `npm i @insoutt/datafast-react`
+
+Luego debes importar los estilos en la raíz del proyecto, por lo general suele ser en `App.tsx`.
+
+`import '@insoutt/datafast-react/dist/styles.css';`
+
+Listo ya puedes realizar tu integración con Datafast.
+
 ## Componentes
 
 ### Datafast
