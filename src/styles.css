@@ -11,7 +11,15 @@
 }
 
 .wpwl-button-pay {
-  @apply df-bg-gray-800 df-rounded-lg df-border-black hover:df-border-gray-700 hover:df-bg-gray-900 df-w-full;
+  @apply df-bg-zinc-800 df-rounded-lg df-border-black df-w-full;
+  @apply hover:df-border-zinc-700;
+  @apply hover:dark:df-bg-gray-400 hover:dark:df-text-zinc-900;
+  @apply dark:df-bg-gray-200 dark:df-text-zinc-900;
+}
+
+.wpwl-button-pay[disabled] {
+  @apply df-border-0 df-bg-zinc-800/80 hover:df-bg-zinc-800/80;
+  @apply dark:df-bg-gray-200/80 hover:dark:df-bg-gray-200/80;
 }
 
 button[data-action='show-initial-forms'] {
@@ -19,6 +27,10 @@ button[data-action='show-initial-forms'] {
   @apply df-bg-gray-100 df-border df-border-dashed df-border-gray-300 df-text-foreground df-py-4;
 }
 
+.wpwl-has-error~.wpwl-hint {
+  @apply df-mt-2;
+  @apply dark:df-text-red-400;
+}
 /* Grupo campos */
 .wpwl-group,
 .wpwl--remember-box {
