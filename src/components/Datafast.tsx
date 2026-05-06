@@ -1,7 +1,8 @@
-import { useEffect, useState, type PropsWithChildren } from 'react';
+import { useEffect, useRef, useState, type PropsWithChildren } from 'react';
 import ShieldCheck from '../icons/ShieldCheck.js';
 import type { WpwlOptions } from '../utils/types.js';
 import { getInnerText, getScriptUrl } from '../utils/helpers.js';
+import { DTF_ORIGIN } from '../utils/constants.js';
 
 interface Props extends PropsWithChildren {
   checkoutId: string;
@@ -16,6 +17,7 @@ interface Props extends PropsWithChildren {
   type?: 'redirection' | 'inline';
   availableBrands?: Array<'VISA' | 'MASTER' | 'AMEX' | 'DINERS' | 'DISCOVER'>;
   config?: Omit<WpwlOptions, 'style'>;
+  onResponsePayment?: (data: any) => void;
 }
 
 export function Datafast({
@@ -30,8 +32,11 @@ export function Datafast({
   amount = 0,
   type = 'redirection',
   availableBrands = ['VISA', 'MASTER', 'AMEX'],
+  onResponsePayment,
 }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const iframeResponse = useRef<HTMLIFrameElement | null>(null);
+  const [showCheckout, setShowCheckout] = useState<boolean>(true);
 
   useEffect(() => {
     setConfig();
@@ -196,9 +201,16 @@ export function Datafast({
     };
   };
 
+  const handleResponsePayment = (data: any) => {
+    console.log('response payment', data);
+    setShowCheckout(false);
+    onResponsePayment?.(data);
+  };
+
   const onMessage = (event: any) => {
-    if (typeof event?.data?.status !== 'undefined') {
+    if (event?.data?.origin === DTF_ORIGIN && typeof event?.data?.status !== 'undefined') {
       console.log('received from', event.data);
+      handleResponsePayment(event.data);
     }
   };
 
@@ -253,7 +265,8 @@ export function Datafast({
       {isLoading && (
         <div className="df-h-screen df-w-full df-absolute df-top-0 df-left-0 df-bg-black/50 df-z-50 df-flex df-items-center df-justify-center" />
       )}
-      <div className="df-w-full df-max-w-lg df-rounded-lg df-border df-border-zinc-200 dark:df-border-zinc-700 df-bg-white dark:df-bg-zinc-900 dark:df-text-white">
+      {/* Checkout form */}
+      {showCheckout && <div className="df-w-full df-max-w-lg df-rounded-lg df-border df-border-zinc-200 dark:df-border-zinc-700 df-bg-white dark:df-bg-zinc-900 dark:df-text-white">
         {/* Header */}
         <div className="df-border-b df-border-zinc-200 dark:df-border-zinc-700 df-p-6">
           <div className="df-flex df-items-center df-justify-between">
@@ -271,6 +284,7 @@ export function Datafast({
             </div>
           </div>
         </div>
+        {/* checkout body */}
         <div className="df-p-4">
           <form
             action={callbackUrl}
@@ -279,12 +293,6 @@ export function Datafast({
             data-brands={availableBrands.join(' ')}
           />
         </div>
-
-        {type === 'inline' && (
-          <div>
-            <iframe name="wp_iframe_response" id="wp_iframe_response"></iframe>
-          </div>
-        )}
 
         {/* Order Summary */}
         {amount > 0 && (
@@ -299,7 +307,13 @@ export function Datafast({
             </div>
           </div>
         )}
-      </div>
+      </div>}
+
+      {type === 'inline' && (
+          <div>
+            <iframe ref={iframeResponse} name="wp_iframe_response" id="wp_iframe_response"></iframe>
+          </div>
+        )}
     </>
   );
 }
