@@ -27,7 +27,7 @@ button[data-action='show-initial-forms'] {
   @apply df-bg-gray-100 df-border df-border-dashed df-border-gray-300 df-text-foreground df-py-4;
 }
 
-.wpwl-has-error~.wpwl-hint {
+.wpwl-has-error ~ .wpwl-hint {
   @apply df-mt-2;
   @apply dark:df-text-red-400;
 }

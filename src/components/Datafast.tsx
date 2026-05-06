@@ -57,7 +57,7 @@ export function Datafast({
       },
       labels: {
         cvv: 'CVV',
-      }
+      },
     };
 
     if (type === 'inline') {
