@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import type { Message, MessageStatus } from '../utils/types.js';
+import { DTF_ORIGIN } from '../utils/constants.js';
 
 export function useMessage() {
   useEffect(() => {
@@ -11,7 +12,7 @@ export function useMessage() {
   }, []);
 
   function listenMessages(event: { data: Message }) {
-    if (event?.data?.origin !== 'dtf-connector') {
+    if (event?.data?.origin !== DTF_ORIGIN) {
       return;
     }
 
@@ -26,7 +27,10 @@ export function useMessage() {
   }
 
   const pingParent = () => {
-    sendMessage('ping', {});
+    sendMessage('ping', {
+      status: 'success',
+      message: 'pong'
+    });
   };
 
   const onSucessTransaction = (data: Record<string, any>) => {
@@ -42,12 +46,11 @@ export function useMessage() {
       throw new Error('window.parent.postMessage is not defined');
       return;
     }
-    console.log('postMessage');
     window.parent.postMessage(
       {
         status,
         data,
-        origin: 'dtf-connector',
+        origin: DTF_ORIGIN,
       },
       '*',
     );
