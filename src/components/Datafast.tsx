@@ -14,7 +14,7 @@ interface Props extends PropsWithChildren {
   rememberCardText?: string;
   amount?: number;
   type?: 'redirection' | 'inline';
-  availableBrands?: string[];
+  availableBrands?: Array<'VISA' | 'MASTER' | 'AMEX' | 'DINERS' | 'DISCOVER'>;
   config?: Omit<WpwlOptions, 'style'>;
 }
 
@@ -36,14 +36,14 @@ export function Datafast({
   useEffect(() => {
     setConfig();
 
-    const loadingObserver = setupLoading();
+    // const loadingObserver = setupLoading();
     const script = setupScript();
 
     window.addEventListener('message', onMessage, false);
 
     return () => {
       script.remove();
-      loadingObserver.disconnect();
+      // loadingObserver.disconnect();
       window.removeEventListener('message', onMessage);
     };
   }, []);
@@ -52,6 +52,12 @@ export function Datafast({
     const defaultConfig: WpwlOptions = {
       locale: 'es',
       showCVVHint: true,
+      registrations: {
+        requireCvv: true,
+      },
+      labels: {
+        cvv: 'CVV',
+      }
     };
 
     if (type === 'inline') {
@@ -243,19 +249,19 @@ export function Datafast({
   };
 
   return (
-    <div className="df-min-h-screen df-border df-bg-white dark:df-bg-zinc-900">
+    <>
       {isLoading && (
         <div className="df-h-screen df-w-full df-absolute df-top-0 df-left-0 df-bg-black/50 df-z-50 df-flex df-items-center df-justify-center" />
       )}
-      <div className="df-w-full df-max-w-lg df-rounded-lg df-border df-border-zinc-200 dark:df-border-zinc-700 df-bg-card df-mx-auto df-bg-white dark:df-bg-zinc-900">
+      <div className="df-w-full df-max-w-lg df-rounded-lg df-border df-border-zinc-200 dark:df-border-zinc-700 df-bg-white dark:df-bg-zinc-900 dark:df-text-white">
         {/* Header */}
         <div className="df-border-b df-border-zinc-200 dark:df-border-zinc-700 df-p-6">
           <div className="df-flex df-items-center df-justify-between">
             <div>
-              <h2 className="df-text-lg df-font-semibold df-tracking-tight">
+              <h2 className="df-text-lg df-font-semibold df-tracking-tight dark:df-text-white">
                 {title}
               </h2>
-              <p className="df-mt-1 df-text-sm df-text-muted-foreground">
+              <p className="df-mt-1 df-text-sm df-text-muted-foreground dark:df-text-white">
                 {description}
               </p>
             </div>
@@ -282,18 +288,18 @@ export function Datafast({
 
         {/* Order Summary */}
         {amount > 0 && (
-          <div className="df-rounded-lg df-bg-gray-50 df-p-4">
+          <div className="df-rounded-lg df-bg-gray-50 df-p-4 dark:df-bg-gray-800">
             <div className="df-flex df-items-center df-justify-between">
               <span className="df-text-sm df-text-muted-foreground">
-                Total a pagar
+                Total a pagar:
               </span>
-              <span className="df-text-xl df-font-semibold df-text-foreground">
+              <span className="df-text-xl df-font-semibold df-text-foreground dark:df-text-white">
                 ${amount.toFixed(2)}
               </span>
             </div>
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }
