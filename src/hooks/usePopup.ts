@@ -1,5 +1,5 @@
-import { DTF_ORIGIN } from "../utils/constants.js";
-import type { MessageStatus } from "../utils/types.js";
+import { DTF_ORIGIN } from '../utils/constants.js';
+import type { MessageStatus } from '../utils/types.js';
 
 interface ListenMessageEvent {
   // data: ;
@@ -17,20 +17,20 @@ interface Message {
 interface UsePopupProps {
   onClosePopup?: () => void;
 }
-export const usePopup = ({
-  onClosePopup,
-}: UsePopupProps = {}) => {
+export const usePopup = ({ onClosePopup }: UsePopupProps = {}) => {
   let handler: ((event: MessageEvent<Message>) => void) | null = null;
 
   const setupListener = ({
-    popupIsReady, onPaymentSuccess, onPaymentError
+    popupIsReady,
+    onPaymentSuccess,
+    onPaymentError,
   }: ListenMessageEvent) => {
     handler = (event: MessageEvent<Message>) => {
       // if (event.origin !== 'https://cards.test') return; // verify origin!
       // if (event.data?.type === 'payment:success') {
       //   // update UI, refetch, etc.
       // }
-      console.log("event received2", event.data);
+      console.log('event received2', event.data);
       switch (event.data.action) {
         case 'popupIsReady':
           popupIsReady();
@@ -47,7 +47,7 @@ export const usePopup = ({
       }
     };
     window.addEventListener('message', handler);
-  }
+  };
 
   const open = (url: string) => {
     const width = 500;
@@ -57,7 +57,7 @@ export const usePopup = ({
     const popup = window.open(
       url,
       'PaymentPopup',
-      `width=${width},height=${height},left=${left},top=${top},resizable,scrollbars`
+      `width=${width},height=${height},left=${left},top=${top},resizable,scrollbars`,
     );
     if (!popup) {
       console.error('Popup blocked');
@@ -70,7 +70,7 @@ export const usePopup = ({
         onClosePopup?.();
       }
     }, 500);
-  }
+  };
 
   const removeListener = () => {
     if (handler) {
@@ -79,27 +79,31 @@ export const usePopup = ({
       return;
     }
     console.warn('No handler to remove');
-  }
+  };
 
   const notifyPopupIsReady = () => {
     sendMessage('success', 'popupIsReady', {
       message: 'popup opened',
     });
-  }
+  };
 
   const notifySuccessPayment = (data: Record<string, any>) => {
     sendMessage('success', 'successPayment', data);
-  }
+  };
 
   const notifyPaymentError = (error: Record<string, any>) => {
     sendMessage('error', 'errorPayment', error);
-  }
+  };
 
   const notifyClosePopup = () => {
     sendMessage('success', 'closePopup', {});
-  }
+  };
 
-  const sendMessage = (status: MessageStatus, action: string, data: Record<string, any>) => {
+  const sendMessage = (
+    status: MessageStatus,
+    action: string,
+    data: Record<string, any>,
+  ) => {
     window.opener?.postMessage(
       {
         status,
@@ -109,7 +113,7 @@ export const usePopup = ({
       },
       // 'https://cards.test' // restrict target origin – never use '*' for sensitive data
     );
-  }
+  };
 
   return {
     setupListener,
@@ -120,4 +124,4 @@ export const usePopup = ({
     notifyPaymentError,
     notifyClosePopup,
   };
-}
+};

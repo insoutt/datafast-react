@@ -29,7 +29,7 @@ export function useMessage() {
   const pingParent = () => {
     sendMessage('ping', {
       status: 'success',
-      message: 'pong'
+      message: 'pong',
     });
   };
 

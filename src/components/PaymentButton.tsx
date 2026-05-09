@@ -48,17 +48,17 @@ export const PaymentButton = (props: Props) => {
   } = props;
 
   const [isLoading, setIsLoading] = useState(false);
-  const {setupListener, removeListener, open} = usePopup({
+  const { setupListener, removeListener, open } = usePopup({
     onClosePopup: () => {
-      console.log("onClosePopup");
+      console.log('onClosePopup');
     },
-  })
+  });
 
   useEffect(() => {
-    if(props.type !== 'popup') return;
+    if (props.type !== 'popup') return;
     setupListener({
       popupIsReady: () => {
-        console.log("popupIsReady");
+        console.log('popupIsReady');
         // props.onPopupIsReady();
       },
       onPaymentSuccess: (data) => {
@@ -83,10 +83,12 @@ export const PaymentButton = (props: Props) => {
         },
       })
       .then((response) => {
-        if(props.type === 'popup') {
-          open(props.popupUrl({
-            checkoutId: response.data.data.id,
-          }));
+        if (props.type === 'popup') {
+          open(
+            props.popupUrl({
+              checkoutId: response.data.data.id,
+            }),
+          );
         } else {
           props.onSuccess({
             checkoutId: response.data.data.id,
