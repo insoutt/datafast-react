@@ -14,7 +14,7 @@ interface Props extends PropsWithChildren {
   rememberCard?: boolean;
   rememberCardText?: string;
   amount?: number;
-  type?: 'redirection' | 'inline';
+  type?: 'redirection' | 'inline' | 'popup';
   availableBrands?: Array<'VISA' | 'MASTER' | 'AMEX' | 'DINERS' | 'DISCOVER'>;
   config?: Omit<WpwlOptions, 'style'>;
   onResponsePayment?: (data: any) => void;

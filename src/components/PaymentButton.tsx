@@ -1,10 +1,10 @@
 import axios from 'axios';
 import type { CheckoutData } from '../utils/types.js';
-import { getScriptUrl } from '../utils/helpers.js';
 import { cva, type VariantProps } from 'class-variance-authority';
 import Spinner from '../icons/Spinner.js';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import CreditCard from '../icons/CreditCard.js';
+import { usePopup } from '../hooks/usePopup.js';
 
 interface SuccessData {
   checkoutId: string;
@@ -14,26 +14,64 @@ type PaymentButtonRenderProps = {
   isLoading: boolean;
   createCheckout: () => void;
 };
-
-interface PaymentButtonProps extends VariantProps<typeof ButtonVariant> {
+interface BasePaymentButtonProps extends VariantProps<typeof ButtonVariant> {
   url: string;
   checkoutData: CheckoutData;
-  onSuccess: (data: SuccessData) => void;
   onError: (error: Error) => void;
   text?: string;
   children?: (props: PaymentButtonRenderProps) => ReactNode;
 }
 
-export const PaymentButton = ({
-  url,
-  checkoutData,
-  onSuccess,
-  onError,
-  text = 'Pagar con tarjeta',
-  variant,
-  children,
-}: PaymentButtonProps) => {
+interface StandardProps extends BasePaymentButtonProps {
+  type?: 'standard';
+  onSuccess: (data: SuccessData) => void;
+}
+
+interface PopupProps extends BasePaymentButtonProps {
+  type: 'popup';
+  onClosePopup: () => void;
+  onPaymentSuccess: (data: any) => void;
+  onPaymentError: (error: any) => void;
+  popupUrl: (data: SuccessData) => string;
+}
+
+type Props = StandardProps | PopupProps;
+
+export const PaymentButton = (props: Props) => {
+  const {
+    url,
+    checkoutData,
+    onError,
+    text = 'Pagar con tarjeta',
+    variant,
+    children,
+  } = props;
+
   const [isLoading, setIsLoading] = useState(false);
+  const {setupListener, removeListener, open} = usePopup({
+    onClosePopup: () => {
+      console.log("onClosePopup");
+    },
+  })
+
+  useEffect(() => {
+    if(props.type !== 'popup') return;
+    setupListener({
+      popupIsReady: () => {
+        console.log("popupIsReady");
+        // props.onPopupIsReady();
+      },
+      onPaymentSuccess: (data) => {
+        props.onPaymentSuccess(data);
+      },
+      onPaymentError: (error) => {
+        props.onPaymentError(error);
+      },
+    });
+    return () => {
+      removeListener();
+    };
+  }, [props.type]);
 
   const createCheckout = () => {
     setIsLoading(true);
@@ -45,9 +83,15 @@ export const PaymentButton = ({
         },
       })
       .then((response) => {
-        onSuccess({
-          checkoutId: response.data.data.id,
-        });
+        if(props.type === 'popup') {
+          open(props.popupUrl({
+            checkoutId: response.data.data.id,
+          }));
+        } else {
+          props.onSuccess({
+            checkoutId: response.data.data.id,
+          });
+        }
       })
       .catch((error) => onError(error))
       .finally(() => setIsLoading(false));

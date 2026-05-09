@@ -44,7 +44,6 @@ export function useMessage() {
   const sendMessage = (status: MessageStatus, data: Record<string, any>) => {
     if (typeof window.parent?.postMessage === 'undefined') {
       throw new Error('window.parent.postMessage is not defined');
-      return;
     }
     window.parent.postMessage(
       {
