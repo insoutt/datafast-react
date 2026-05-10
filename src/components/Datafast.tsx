@@ -131,15 +131,15 @@ export function Datafast({
 
             if (checkbox && brand && details) {
               checkbox.innerHTML =
-                `<div class="flex items-center gap-2">` +
+                `<div class="df-flex df-items-center df-gap-2">` +
                 checkbox.innerHTML +
                 `
-                <div class="flex h-10 w-16 ml-2 items-center justify-center rounded bg-white">
+                <div class="df-flex df-h-10 df-w-16 df-ml-2 df-items-center df-justify-center df-rounded df-bg-white">
                     ${brand.innerHTML}
                 </div>
                 <div>
-                  <div class="sm:truncate text-sm font-mono"><sup><span class="hidden sm:inline">**** ****</span> ****</sup> ${registrationNumber}</div>
-                  <div class="sm:truncate text-xs">
+                  <div class="sm:df-truncate df-text-sm df-font-mono"><sup><span class="df-hidden df-sm:inline">**** ****</span> ****</sup> ${registrationNumber}</div>
+                  <div class="sm:df-truncate df-text-xs">
                     <span>${holderName}</span>
                     <span> - Vence ${expiryDate}</span>
                   </div>
