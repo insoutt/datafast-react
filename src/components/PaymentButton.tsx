@@ -2,11 +2,9 @@ import axios from 'axios';
 import type { CheckoutData } from '../utils/types.js';
 import { cva, type VariantProps } from 'class-variance-authority';
 import Spinner from '../icons/Spinner.js';
-import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import CreditCard from '../icons/CreditCard.js';
-import { usePopup } from '../hooks/usePopup.js';
-
 interface SuccessData {
   checkoutId: string;
 }
@@ -31,15 +29,8 @@ interface StandardProps extends BasePaymentButtonProps {
   onSuccess: (data: SuccessData) => void;
 }
 
-interface PopupProps extends BasePaymentButtonProps {
-  type: 'popup';
-  onClosePopup: () => void;
-  onPaymentSuccess: (data: any) => void;
-  onPaymentError: (error: any) => void;
-  popupUrl: (data: SuccessData) => string;
-}
 
-export type PaymentButtonProps = StandardProps | PopupProps;
+export type PaymentButtonProps = StandardProps;
 
 export const PaymentButton = (props: PaymentButtonProps) => {
   const {
@@ -49,6 +40,7 @@ export const PaymentButton = (props: PaymentButtonProps) => {
     text = 'Pagar con tarjeta',
     variant,
     onClose,
+    onSuccess,
     publicToken,
     checkoutUrl,
     children,
@@ -56,30 +48,6 @@ export const PaymentButton = (props: PaymentButtonProps) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [sandboxFrameSrc, setSandboxFrameSrc] = useState<string | null>(null);
-  const { setupListener, removeListener } = usePopup({
-    onClosePopup: () => {
-      console.log('onClosePopup');
-    },
-  });
-
-  useEffect(() => {
-    if (props.type !== 'popup') return;
-    setupListener({
-      popupIsReady: () => {
-        console.log('popupIsReady');
-        // props.onPopupIsReady();
-      },
-      onPaymentSuccess: (data) => {
-        props.onPaymentSuccess(data);
-      },
-      onPaymentError: (error) => {
-        props.onPaymentError(error);
-      },
-    });
-    return () => {
-      removeListener();
-    };
-  }, [props.type]);
 
   const closeSandbox = useCallback(() => {
     setSandboxFrameSrc(null);
@@ -108,9 +76,7 @@ export const PaymentButton = (props: PaymentButtonProps) => {
       .then((response) => {
         const checkoutId = response.data.data.id as string;
         openSandbox({ checkoutId });
-        if (props.type !== 'popup') {
-          props.onSuccess({ checkoutId });
-        }
+        onSuccess({ checkoutId });
       })
       .catch((error) => onError(error))
       .finally(() => setIsLoading(false));
