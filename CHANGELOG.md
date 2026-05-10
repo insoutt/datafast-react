@@ -1,5 +1,11 @@
 # @insoutt/datafast-react
 
+## 2.0.4
+
+### Patch Changes
+
+- 90d6261: Add support for inline and popup
+
 ## 2.0.3
 
 ### Patch Changes
