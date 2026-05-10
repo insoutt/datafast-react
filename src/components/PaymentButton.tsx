@@ -29,7 +29,6 @@ interface StandardProps extends BasePaymentButtonProps {
   onSuccess: (data: SuccessData) => void;
 }
 
-
 export type PaymentButtonProps = StandardProps;
 
 export const PaymentButton = (props: PaymentButtonProps) => {
