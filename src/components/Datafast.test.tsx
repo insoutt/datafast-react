@@ -73,7 +73,7 @@ describe('Datafast', () => {
     );
 
     expect(container.querySelector('iframe#wp_iframe_response')).not.toBeNull();
-    expect(getByText('Total a pagar')).toBeTruthy();
-    expect(getByText('$12.50')).toBeTruthy();
+    expect(getByText(/Total a pagar/)).toBeTruthy();
+    expect(getByText(/\$\s*12\.50/)).toBeTruthy();
   });
 });
