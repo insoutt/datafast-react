@@ -1,5 +1,11 @@
 # @insoutt/datafast-react
 
+## 2.2.0
+
+### Minor Changes
+
+- d399f26: Fix styles
+
 ## 2.1.0
 
 ### Minor Changes
