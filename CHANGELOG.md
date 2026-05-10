@@ -1,5 +1,11 @@
 # @insoutt/datafast-react
 
+## 2.1.0
+
+### Minor Changes
+
+- 4d172b3: Drop popup support and improve payment button
+
 ## 2.0.4
 
 ### Patch Changes
