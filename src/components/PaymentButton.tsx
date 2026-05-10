@@ -116,22 +116,12 @@ export const PaymentButton = (props: PaymentButtonProps) => {
       .finally(() => setIsLoading(false));
   };
 
-  useEffect(() => {
-    if (!sandboxFrameSrc) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeSandbox();
-    };
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
-  }, [sandboxFrameSrc, closeSandbox]);
-
   const sandboxModal =
     sandboxFrameSrc && typeof document !== 'undefined'
       ? createPortal(
           <div
             className="df-fixed df-inset-0 df-z-[9999] df-flex df-items-center df-justify-center df-bg-black/50 df-p-4"
             role="presentation"
-            onClick={closeSandbox}
           >
             <div
               role="dialog"
