@@ -55,9 +55,7 @@ export const PaymentButton = (props: PaymentButtonProps) => {
 
   const openSandbox = useCallback(
     (data: { checkoutId: string }) => {
-      const frameUrl = new URL(checkoutUrl.replace(':id', data.checkoutId));
-      frameUrl.searchParams.set('checkoutId', data.checkoutId);
-      setSandboxFrameSrc(frameUrl.toString());
+      setSandboxFrameSrc(checkoutUrl.replace(':id', data.checkoutId));
     },
     [checkoutUrl],
   );
