@@ -2,7 +2,8 @@ import axios from 'axios';
 import type { CheckoutData } from '../utils/types.js';
 import { cva, type VariantProps } from 'class-variance-authority';
 import Spinner from '../icons/Spinner.js';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import CreditCard from '../icons/CreditCard.js';
 import { usePopup } from '../hooks/usePopup.js';
 
@@ -17,7 +18,10 @@ type PaymentButtonRenderProps = {
 interface BasePaymentButtonProps extends VariantProps<typeof ButtonVariant> {
   url: string;
   checkoutData: CheckoutData;
+  publicToken: string;
+  checkoutUrl: string;
   onError: (error: Error) => void;
+  onClose?: () => void;
   text?: string;
   children?: (props: PaymentButtonRenderProps) => ReactNode;
 }
@@ -35,20 +39,24 @@ interface PopupProps extends BasePaymentButtonProps {
   popupUrl: (data: SuccessData) => string;
 }
 
-type Props = StandardProps | PopupProps;
+export type PaymentButtonProps = StandardProps | PopupProps;
 
-export const PaymentButton = (props: Props) => {
+export const PaymentButton = (props: PaymentButtonProps) => {
   const {
     url,
     checkoutData,
     onError,
     text = 'Pagar con tarjeta',
     variant,
+    onClose,
+    publicToken,
+    checkoutUrl,
     children,
   } = props;
 
   const [isLoading, setIsLoading] = useState(false);
-  const { setupListener, removeListener, open } = usePopup({
+  const [sandboxFrameSrc, setSandboxFrameSrc] = useState<string | null>(null);
+  const { setupListener, removeListener } = usePopup({
     onClosePopup: () => {
       console.log('onClosePopup');
     },
@@ -73,6 +81,20 @@ export const PaymentButton = (props: Props) => {
     };
   }, [props.type]);
 
+  const closeSandbox = useCallback(() => {
+    setSandboxFrameSrc(null);
+    onClose?.();
+  }, []);
+
+  const openSandbox = useCallback(
+    (data: { checkoutId: string }) => {
+      const frameUrl = new URL(checkoutUrl.replace(':id', data.checkoutId));
+      frameUrl.searchParams.set('checkoutId', data.checkoutId);
+      setSandboxFrameSrc(frameUrl.toString());
+    },
+    [checkoutUrl],
+  );
+
   const createCheckout = () => {
     setIsLoading(true);
     axios
@@ -80,44 +102,93 @@ export const PaymentButton = (props: Props) => {
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
+          Authorization: `Bearer ${publicToken}`,
         },
       })
       .then((response) => {
-        if (props.type === 'popup') {
-          open(
-            props.popupUrl({
-              checkoutId: response.data.data.id,
-            }),
-          );
-        } else {
-          props.onSuccess({
-            checkoutId: response.data.data.id,
-          });
+        const checkoutId = response.data.data.id as string;
+        openSandbox({ checkoutId });
+        if (props.type !== 'popup') {
+          props.onSuccess({ checkoutId });
         }
       })
       .catch((error) => onError(error))
       .finally(() => setIsLoading(false));
   };
 
+  useEffect(() => {
+    if (!sandboxFrameSrc) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeSandbox();
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [sandboxFrameSrc, closeSandbox]);
+
+  const sandboxModal =
+    sandboxFrameSrc && typeof document !== 'undefined'
+      ? createPortal(
+          <div
+            className="df-fixed df-inset-0 df-z-[9999] df-flex df-items-center df-justify-center df-bg-black/50 df-p-4"
+            role="presentation"
+            onClick={closeSandbox}
+          >
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Checkout"
+              className="df-relative df-flex df-h-[min(90vh,700px)] df-w-full df-max-w-lg df-flex-col df-overflow-hidden df-rounded-lg df-bg-white df-shadow-lg df-border df-border-white"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="df-flex df-items-center df-justify-end">
+                <button
+                  type="button"
+                  onClick={closeSandbox}
+                  className="df-flex df-h-8 df-w-8 df-items-center df-justify-center df-rounded-md df-text-gray-600 hover:df-bg-gray-100"
+                  aria-label="Cerrar"
+                >
+                  x
+                </button>
+              </div>
+              <iframe
+                title="Checkout"
+                src={sandboxFrameSrc}
+                className="df-h-full df-w-full df-flex-1 df-border-0"
+                allow="payment *"
+              />
+            </div>
+          </div>,
+          document.body,
+        )
+      : null;
+
   if (children) {
-    return children({
-      isLoading,
-      createCheckout,
-    });
+    return (
+      <>
+        {sandboxModal}
+        {children({
+          isLoading,
+          createCheckout,
+        })}
+      </>
+    );
   }
 
   return (
-    <button
-      onClick={createCheckout}
-      className={ButtonVariant({ variant, disabled: isLoading })}
-    >
-      {isLoading ? (
-        <Spinner className="df-size-4 df-animate-spin" />
-      ) : (
-        <CreditCard className="df-size-4" />
-      )}
-      {text}
-    </button>
+    <>
+      {sandboxModal}
+      <button
+        onClick={createCheckout}
+        className={ButtonVariant({ variant, disabled: isLoading })}
+      >
+        {isLoading ? (
+          <Spinner className="df-size-4 df-animate-spin" />
+        ) : (
+          <CreditCard className="df-size-4" />
+        )}
+        {text}
+      </button>
+    </>
   );
 };
 

@@ -59,6 +59,8 @@ describe('PaymentButton', () => {
     const { getByRole } = render(
       <PaymentButton
         url="https://api.example.com/checkout"
+        checkoutUrl="https://sandbox.example.com/checkout"
+        publicToken="public_test_token"
         checkoutData={checkoutData}
         onSuccess={onSuccess}
         onError={onError}
@@ -74,6 +76,7 @@ describe('PaymentButton', () => {
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
+          Authorization: 'Bearer public_test_token',
         },
       },
     );
@@ -100,6 +103,8 @@ describe('PaymentButton', () => {
     const { container, getByRole } = render(
       <PaymentButton
         url="https://api.example.com/checkout"
+        checkoutUrl="https://sandbox.example.com/checkout"
+        publicToken="public_test_token"
         checkoutData={checkoutData}
         onSuccess={onSuccess}
         onError={onError}
@@ -127,6 +132,8 @@ describe('PaymentButton', () => {
     const { getByRole } = render(
       <PaymentButton
         url="https://api.example.com/checkout"
+        checkoutUrl="https://sandbox.example.com/checkout"
+        publicToken="public_test_token"
         checkoutData={checkoutData}
         onSuccess={onSuccess}
         onError={onError}
